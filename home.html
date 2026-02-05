@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>EduBio - หน้าหลัก</title>
+ <script src="https://cdn.tailwindcss.com"></script>
+ <!-- Google Fonts: Inter for numbers/English, Noto Sans Thai for Thai -->
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+Thai:wght@300;400;600;700&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="home.css">
+</head>
+<body class="font-noto text-gray-800 min-h-screen relative overflow-y-auto">
+ <div class="container bg-white p-10 rounded-2xl shadow-2xl max-w-4xl w-full mx-auto border border-gray-200 relative z-10">
+  <img src="https://i.postimg.cc/bvvCtDTz/istockphoto-1411153646-612x612-removebg-preview.png" alt="ใบไม้บน" class="leaf1">
+  <img src="https://i.postimg.cc/x88hr9gP/leaf-vine-vector-vines-cartoon-sticker-599312-wh860-removebg-preview.png" alt="ใบไม้ล่าง" class="leaf2">
+  <div class="flex flex-col md:flex-row justify-between items-center mb-8 border-b pb-6">
+  <h1 class="text-4xl font-extrabold text-green-700 mb-4 md:mb-0 drop-shadow-md">EduBio</h1>
+  <div class="flex flex-wrap justify-center md:justify-end items-center space-x-2 md:space-x-4">
+  <span id="userGreeting" class="text-xl font-semibold text-gray-700 mb-2 md:mb-0">สวัสดี, ผู้ใช้งาน!</span>
+  <button id="viewProfileBtn" class="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
+    ดูโปรไฟล์
+  </button>
+  <button id="editProfileBtn" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
+    แก้ไขโปรไฟล์
+  </button>
+  <button id="logoutBtn" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
+    ออกจากระบบ
+  </button>
+  <button id="dailyQuizBtn" class="bg-yellow-400 hover:bg-yellow-500 text-white py-2 px-4 rounded-full shadow-md transition">
+  🎯 Quiz!
+  </button>
+  <div class="coin-display">
+  <span id="coinBalanceDisplay">0</span> เหรียญ
+</div>
+
+<a href="https://forms.gle/y8WNhR9guYGYgQNV8"target = "_blank"class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105 shadow-md">ลิงค์แบบประเมิน</a>
+  </div>
+  </div>
+ 
+  <!-- Lesson Cards Section -->
+  <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">เลือกบทเรียน</h2>
+  <div id="lessonCardsContainer" class="grid grid-cols-1 gap-8 w-full"> 
+    <div class="lesson-card bg-lime-100 p-6 rounded-xl shadow-lg border border-lime-200 cursor-pointer hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1" data-lesson="taxonomy">
+      <span class="lesson-card-icon text-6xl mb-4 text-center">🍄</span> <!-- Fungi Emoji for Taxonomy -->
+      <h3 class="text-2xl font-bold text-green-800 mb-2 text-center">อนุกรมวิธาน</h3>
+      <p class="text-gray-700 text-center">ศึกษาการจัดหมวดหมู่สิ่งมีชีวิต, หลักการตั้งชื่อ, และความสัมพันธ์ทางวิวัฒนาการ.</p>
+    </div>
+    <!-- Add more lesson cards here if needed. Ensure content remains the same as original. -->
+    <div class="lesson-card bg-green-50 p-6 rounded-xl shadow-lg border border-green-100 opacity-70 cursor-not-allowed">
+      <span class="lesson-card-icon text-6xl mb-4 text-center">🧠</span> <!-- Plant Emoji -->
+      <h3 class="text-2xl font-bold text-green-800 mb-2 text-center">ระบบประสาท (Coming Soon)</h3>
+      <p class="text-gray-700 text-center">ศึกษาเกี่ยวกับการทำงานของระบบประสาท.</p>
+    </div>
+    <div class="lesson-card bg-emerald-50 p-6 rounded-xl shadow-lg border border-emerald-100 opacity-70 cursor-not-allowed">
+      <span class="lesson-card-icon text-6xl mb-4 text-center">🏃</span> <!-- Animal Emoji -->
+      <h3 class="text-2xl font-bold text-green-800 mb-2 text-center">การเคลื่อนที่ (Coming Soon)</h3>
+      <p class="text-gray-700 text-center">ศึกษาการเคลื่อนที่ของสิ่งมีชีวิต.</p>
+    </div>
+  </div>
+ 
+  <!-- Profile Modal -->
+  <div id="profileModal" class="modal">
+  <div class="profile-modal-content bg-white p-8 rounded-xl shadow-xl w-full max-w-lg relative">
+  <h2 class="text-3xl font-bold mb-6 text-green-700 text-center">แก้ไขโปรไฟล์</h2>
+  <div class="mb-4 text-left">
+ <label for="profileFullNameInput" class="block text-gray-700 text-lg font-semibold mb-2">ชื่อ-นามสกุล:</label>
+  <input type="text" name = 'ชื่อ-นามสกุล'id="profileFullNameInput" placeholder="ชื่อ นามสกุลของคุณ" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 text-lg">
+  </div>
+  <div class="mb-4 text-left">
+  <label for="profileClassInput" class="block text-gray-700 text-lg font-semibold mb-2">ห้องเรียน:</label>
+  <input type="text" name = 'ห้อง' id="profileClassInput" placeholder="ห้องเรียนของคุณ (เช่น ม.4/1)" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 text-lg">
+  </div>
+  <div class="mb-4 text-left">
+  <label for="profileNumberInput" class="block text-gray-700 text-lg font-semibold mb-2">เลขที่:</label>
+  <input type="number" name = 'เลขที่' id="profileNumberInput" placeholder="เลขที่ของคุณ (เช่น 1, 2, 3)" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 text-lg">
+  </div>
+  <div class="mb-4 text-left">
+  <label for="profileStudentIdInput" class="block text-gray-700 text-lg font-semibold mb-2">เลขประจำตัว:</label>
+  <input type="text" name = 'เลขประจำตัว' id="profileStudentIdInput" placeholder="เลขประจำตัวนักเรียนของคุณ" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 text-lg">
+  </div>
+  <button id="saveProfileBtn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105 w-full mb-3 shadow-md">
+  บันทึก
+  </button>
+  <button id="closeProfileModalBtn" class="bg-gray-400 hover:bg-gray-500 text-white font-semibold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105 w-full shadow-md">
+  ยกเลิก
+  </button>
+  </div>
+  </div>
+ 
+  <!-- Display Profile Modal (for displaying data and scores) -->
+  <!-- Ensure 'display: none;' is set in home.css for this class initially -->
+  <div class="display-profile-modal" id="displayProfileModal">
+    <div class="display-profile-modal-content bg-white p-8 rounded-xl shadow-xl w-full max-w-lg relative">
+
+        <h2 class="text-3xl font-bold mb-6 text-green-700 text-center">ข้อมูลโปรไฟล์และคะแนน</h2>
+        <p class="text-lg mb-3"><span class="font-semibold text-gray-700">ชื่อ-นามสกุล:</span> <span id="displayFullName" class="text-green-800"></span></p>
+        <p class="text-lg mb-3"><span class="font-semibold text-gray-700">ชั้น:</span> <span id="displayClass" class="text-green-800"></span></p>
+        <p class="text-lg mb-3"><span class="font-semibold text-gray-700">เลขที่:</span> <span id="displayNumber" class="text-green-800"></span></p>
+        <p class="text-lg mb-4"><span class="font-semibold text-gray-700">เลขประจำตัว:</span> <span id="displayStudentId" class="text-green-800"></span></p>
+        <p class="text-lg mb-3">
+        <span class="font-semibold text-gray-700">เหรียญสะสม:</span>
+        <span id="displayCoinAmount" class="text-yellow-600 font-bold"></span> 🪙
+        </p>
+        <h3 class="text-2xl font-semibold mb-4 text-gray-700 border-t pt-4 mt-4">คะแนนบทเรียน:</h3>
+        <div id="lessonScoresDisplay" class="max-h-60 overflow-y-auto pr-2">
+            <!-- Lesson scores will be dynamically inserted here -->
+            <p class="text-gray-500 italic" id="noScoresMessage">ยังไม่มีคะแนนบทเรียน</p>
+        </div>
+
+        <button id="closeDisplayProfileModalBtn" class="bg-gray-400 hover:bg-gray-500 text-white font-semibold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105 mt-6 w-full shadow-md">
+            ปิด
+        </button>
+    </div>
+  </div>
+
+  <div id="chat-module-placeholder"></div>
+ 
+  <!-- Existing JavaScript imports and scripts. No changes here. -->
+  <script type="module" src="home.js"></script>
+  <script type="module">
+  // Load chat module HTML
+  fetch('chat_module.html')
+  .then(response => response.text())
+  .then(html => {
+  document.getElementById('chat-module-placeholder').innerHTML = html;
+  // Dynamically import chat_module.js after HTML is loaded
+  import('./chat_module.js')
+  .then(module => {
+  // Call the initChatModule function from the imported module
+  if (typeof module.initChatModule === 'function') {
+  module.initChatModule();
+  }
+  // Pass lessonsData context to chat module if needed for home page
+  if (typeof module.setChatContext === 'function') {
+  module.setChatContext({}); // No specific lesson context on home page.
+  }
+  // Ensure the chat button functions after module is loaded
+  const chatButton = document.getElementById('chatButton'); // Make sure this ID exists in chat_module.html
+  const chatModule = document.getElementById('chatModule'); // Make sure this ID exists in chat_module.html
+  if (chatButton && chatModule) {
+      chatButton.addEventListener('click', () => {
+          chatModule.classList.remove('hidden');
+          chatModule.classList.add('flex'); // To enable flexbox for centering
+      });
+  }
+  })
+  .catch(error => console.error('Error loading chat_module.js:', error));
+  })
+  .catch(error => console.error('Error loading chat_module.html:', error));
+  </script>
+  <div id="quizModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden z-50">
+  <div class="bg-white p-6 rounded-lg shadow-xl max-w-lg w-full">
+    <h2 class="text-xl font-bold text-green-700 mb-4">แบบทดสอบประจำวัน</h2>
+    <div id="quizQuestionContainer" class="text-gray-800 mb-4"></div>
+    <div id="quizChoices" class="space-y-2 mb-4"></div>
+    <button id="submitQuizAnswerBtn" class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded w-full">ยืนยันคำตอบ</button>
+    <button id="closeQuizModalBtn" class="mt-2 text-sm text-gray-500 hover:underline w-full">ปิด</button>
+  </div>
+</div>
+
+</body>
+</html>
