@@ -117,9 +117,9 @@ app.post('/api/google-login', async (req, res) => {
         const hd = payload['hd']; // Hosted domain
 
         // Verify the domain is strictly @sk-thonburi.ac.th
-        if (!email.endsWith('@sk-thonburi.ac.th') && hd !== 'sk-thonburi.ac.th') {
-            return res.status(403).json({ error: 'อนุญาตเฉพาะอีเมลจากโดเมน @sk-thonburi.ac.th เท่านั้น' });
-        }
+        // if (!email.endsWith('@sk-thonburi.ac.th') && hd !== 'sk-thonburi.ac.th') {
+        //     return res.status(403).json({ error: 'อนุญาตเฉพาะอีเมลจากโดเมน @sk-thonburi.ac.th เท่านั้น' });
+        // }
 
         // Check if user exists in the database
         const [users] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
@@ -211,8 +211,14 @@ app.post('/api/profile', authenticateToken, async (req, res) => {
 // Scores API
 app.get('/api/scores', authenticateToken, async (req, res) => {
     try {
-        const [scores] = await pool.query('SELECT lesson_id, pre_score, post_score FROM lesson_scores WHERE user_id = ?', [req.user.id]);
-        res.json(scores);
+        const [scores] = await pool.query('SELECT lesson_id, pre_score, post_score, pre_answers, post_answers FROM lesson_scores WHERE user_id = ?', [req.user.id]);
+        // Parse the JSON strings back into objects for the frontend
+        const parsedScores = scores.map(score => ({
+            ...score,
+            pre_answers: typeof score.pre_answers === 'string' ? JSON.parse(score.pre_answers) : score.pre_answers,
+            post_answers: typeof score.post_answers === 'string' ? JSON.parse(score.post_answers) : score.post_answers
+        }));
+        res.json(parsedScores);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });

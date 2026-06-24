@@ -298,7 +298,7 @@ async function saveScore(lessonId, testType, score, answers) { // Added 'answers
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
             body: JSON.stringify({ lessonId, testType, score, answers })
         });
-        console.log(`บันทึกคะแนน ${testType} สำเร็จสำหรับบทเรียน ${lessonId}: ${score}`);
+
 
         // ** NEW: Send score data to Google Apps Script (Single Sheet) **
         if (GOOGLE_APPS_SCRIPT_WEB_APP_URL && GOOGLE_APPS_SCRIPT_WEB_APP_URL !== 'https://script.google.com/macros/s/AKfycby3yHKre1_e5YdHLVDx7qvLecVZf7t2mN9UeCTMFTPUbgs5HNd4A69nW1MrFE3QzEkW/exec') {
@@ -309,7 +309,7 @@ async function saveScore(lessonId, testType, score, answers) { // Added 'answers
                 const userProfileSnap = await response.json();
                 if (Object.keys(userProfileSnap).length > 0) {
                     currentUserProfile = userProfileSnap;
-                    console.log("Refreshed user profile for score sync:", currentUserProfile);
+
                 } else {
                     console.warn("User profile not found for score sync. Cannot send full data to Google Sheet.");
                     showMessageBox("ข้อควรทราบ", "โปรดกรอกข้อมูลโปรไฟล์ของคุณให้ครบถ้วน (โดยเฉพาะ เลขประจำตัว) เพื่อให้ข้อมูลคะแนนปรากฏใน Google Sheet ได้สมบูรณ์");
@@ -337,7 +337,6 @@ async function saveScore(lessonId, testType, score, answers) { // Added 'answers
                         postScore: dataToSave.postScore
                     }
                 };
-                console.log("กำลังส่งข้อมูลคะแนนไปยัง Google Apps Script (ชีทเดียว):", scoreDataToSend);
                 const response = await fetch(GOOGLE_APPS_SCRIPT_WEB_APP_URL, {
                     method: 'POST',
                     mode: 'cors', // Enable CORS
@@ -349,7 +348,7 @@ async function saveScore(lessonId, testType, score, answers) { // Added 'answers
 
                 const result = await response.json();
                 if (result.status === 'success') {
-                    console.log("ส่งข้อมูลคะแนนไป Google Sheet สำเร็จ:", result.message);
+
                 } else {
                     console.error("ข้อผิดพลาดในการส่งข้อมูลคะแนนไป Google Sheet:", result.message);
                 }
@@ -394,7 +393,7 @@ async function loadLesson(lessonId) {
                     studentId: null
                 };
             }
-            console.log("Loaded current user profile on auth state change:", currentUserProfile);
+
         } catch (error) {
             console.error("Error loading user profile on auth state change:", error);
             currentUserProfile = {
@@ -415,7 +414,7 @@ async function loadLesson(lessonId) {
 async function loadSavedLessonState(lessonId) {
     // Only attempt to load if user is logged in
     if (!currentUserId) {
-        console.log("No currentUserId, skipping loadSavedLessonState. Rendering fresh pre-test.");
+
         renderQuestions(window.currentLessonData.preTest, 'preTestQuestions', 'pre');
         document.getElementById('continueToContentBtn').classList.add('hidden'); // Ensure hidden initially
         document.getElementById('submitPreTestBtn').disabled = false; // Ensure enabled
@@ -428,21 +427,36 @@ async function loadSavedLessonState(lessonId) {
         const savedData = scores.find(s => s.lesson_id === lessonId);
         
         if (savedData) {
-            console.log("Saved lesson data found:", savedData);
+
 
             // Load pre-test state
             if (savedData.pre_answers) {
                 userPreTestAnswers = savedData.pre_answers;
                 preTestScore = savedData.pre_score || 0; // Ensure score is loaded too
-                console.log("Pre-test answers loaded. Rendering in review mode.");
+
                 // Render pre-test with saved answers and show explanations
                 renderQuestions(window.currentLessonData.preTest, 'preTestQuestions', 'pre', true, userPreTestAnswers);
                 document.getElementById('preTestResult').textContent = `คุณทำถูก ${preTestScore} ข้อ จาก ${window.currentLessonData.preTest.length} ข้อ`;
                 document.getElementById('preTestResult').classList.remove('hidden');
                 document.getElementById('continueToContentBtn').classList.remove('hidden'); // Show continue button
                 document.getElementById('submitPreTestBtn').disabled = true; // Disable submit button
+
+                // Auto advance to lesson content
+                showMessageBox("ข้ามแบบทดสอบก่อนเรียน", "คุณได้ทำแบบทดสอบก่อนเรียนบทนี้ไปแล้ว ระบบจะนำคุณเข้าสู่เนื้อหาบทเรียน", () => {
+                    if (currentLessonId === 'taxonomy') {
+                        showSection('taxonomyIntroSection');
+                        document.getElementById('generalIntroTitle').textContent = "ภาพรวมการจำแนกสิ่งมีชีวิต";
+                        document.getElementById('generalIntroContent').innerHTML = window.currentLessonData.content.introductionText;
+                        renderGeneralTaxonomyVideos();
+                        renderGeneralTaxonomySlides();
+                        setupGeneralSlidesToggle();
+                    } else {
+                        showSection('contentSection');
+                        renderLessonContent();
+                    }
+                });
             } else {
-                console.log("No saved pre-test answers for this lesson. Rendering fresh pre-test.");
+
                 renderQuestions(window.currentLessonData.preTest, 'preTestQuestions', 'pre');
                 document.getElementById('continueToContentBtn').classList.add('hidden'); // Hide continue button
                 document.getElementById('submitPreTestBtn').disabled = false; // Ensure submit button is enabled
@@ -463,7 +477,7 @@ async function loadSavedLessonState(lessonId) {
             }
 
         } else {
-            console.log("No saved lesson data found for this user/lesson. Rendering fresh pre-test.");
+
             renderQuestions(window.currentLessonData.preTest, 'preTestQuestions', 'pre');
             document.getElementById('continueToContentBtn').classList.add('hidden'); // Hide continue button
             document.getElementById('submitPreTestBtn').disabled = false; // Ensure submit button is enabled
@@ -697,13 +711,13 @@ async function displayScoreSummary() {
 
 // --- Main Logic on Page Load ---
 document.addEventListener('DOMContentLoaded', async () => {
-    console.log("DOMContentLoaded fired."); // Debugging line
+// Debugging line
 
     // Get lesson ID from URL query parameter
     const urlParams = new URLSearchParams(window.location.search);
     currentLessonId = urlParams.get('id');
 
-    console.log("Current lesson ID from URL:", currentLessonId); // Debugging line
+// Debugging line
 
     // Get DOM elements for navigation
     const backToHomeBtn = document.getElementById('backToHomeBtn');
@@ -737,7 +751,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (token && userStr) {
             const user = JSON.parse(userStr);
             currentUserId = user.id; // Map id to uid equivalent
-            console.log("ผู้ใช้เข้าสู่ระบบในหน้าบทเรียน:", currentUserId);
+
             // Fetch current user profile after authentication to populate currentUserProfile
             // Note: Since Firestore is being removed, this logic should be updated to fetch from MySQL API.
             // For now, we mock the profile.
@@ -746,12 +760,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 class: '',
                 studentId: null
             };
-            console.log("Loaded current user profile on auth state change:", currentUserProfile);
+
             await loadLesson(currentLessonId); // Load lesson state after currentUserId and profile are set
         } else {
             currentUserId = null;
             currentUserProfile = {}; // Clear profile if no user
-            console.log("ผู้ใช้ออกจากระบบในหน้าบทเรียน คุณสมบัติบางอย่างอาจถูกจำกัด");
+
             loadLesson(currentLessonId); // Still load the content, but without user-specific data
         }
 
@@ -834,9 +848,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     if (backFromKingdomSelectionToTaxonomyIntroBtn) {
-    console.log("ปุ่มย้อนกลับจากอาณาจักร → taxonomy intro ถูกพบ");
+
     backFromKingdomSelectionToTaxonomyIntroBtn.addEventListener('click', () => {
-        console.log("ผู้ใช้กดปุ่มย้อนกลับไป taxonomy intro");
+
         showSection('taxonomyIntroSection');
         document.getElementById('generalIntroTitle').textContent = "ภาพรวมการจำแนกสิ่งมีชีวิต";
         document.getElementById('generalIntroContent').innerHTML = window.currentLessonData.content.introductionText;
