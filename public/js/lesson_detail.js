@@ -42,12 +42,6 @@ function showMessageBox(title, body, callback = null) {
 // Function to show/hide sections
 function showSection(sectionId) {
     const sections = ['preTestSection', 'taxonomyIntroSection', 'kingdomSelectionSection', 'contentSection', 'postTestSection', 'scoreSummarySection'];
-    const dynamicBackButtonsContainer = document.getElementById('dynamicBackButtons');
-
-    // Clear all dynamic back buttons first
-    if (dynamicBackButtonsContainer) {
-        dynamicBackButtonsContainer.innerHTML = '';
-    }
 
     sections.forEach(id => {
         const section = document.getElementById(id);
@@ -56,53 +50,11 @@ function showSection(sectionId) {
                 section.classList.add('active');
                 section.classList.remove('hidden');
                 const guideImg = document.getElementById("teacherGuide");
-      if (guideImg) {
-        if (sectionId === "kingdomSelectionSection") {
-          guideImg.classList.remove("hidden");
-        } else {
-          guideImg.classList.add("hidden");
-        }
-      }
-
-                // Add dynamic back buttons based on sectionId
-                if (dynamicBackButtonsContainer) {
-                    let backButton = null;
-                    if (sectionId === 'taxonomyIntroSection') {
-                        backButton = createBackButton(
-                            'backFromTaxonomyIntroToPreTestBtn',
-                            'กลับไปทำแบบทดสอบก่อนเรียน',
-                            'M10 18a8 8 0 100-16 8 8 0 000 16zm.707-10.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L9.414 11H13a1 1 0 100-2H9.414l1.293-1.293z',
-                            () => {
-                                showSection('preTestSection');
-                                // Ensure questions are rendered with previous answers and disabled for review
-                                renderQuestions(window.currentLessonData.preTest, 'preTestQuestions', 'pre', true, userPreTestAnswers);
-                                document.getElementById('submitPreTestBtn').disabled = true; // Keep disabled after review
-                                document.getElementById('preTestResult').classList.remove('hidden'); // Ensure result is visible for review
-                                document.getElementById('continueToContentBtn').classList.remove('hidden'); // Show continue button
-                            }
-                        );
-                    } else if (sectionId === 'kingdomSelectionSection') {
-                        backButton = createBackButton(
-                            'backFromKingdomSelectionToTaxonomyIntroBtn',
-                            'กลับไปภาพรวมอนุกรมวิธาน',
-                            'M10 18a8 8 0 100-16 8 8 0 000 16zm.707-10.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L9.414 11H13a1 1 0 100-2H9.414l1.293-1.293z',
-                            () => {
-                                showSection('taxonomyIntroSection');
-                                document.getElementById('generalIntroTitle').textContent = "ภาพรวมการจำแนกสิ่งมีชีวิต"; // Specific title for this back button
-                                document.getElementById('generalIntroContent').innerHTML = window.currentLessonData.content.introductionText;
-                                // Re-render general videos if they exist
-                                renderGeneralTaxonomyVideos();
-                                renderGeneralTaxonomySlides();
-                                setupGeneralSlidesToggle();
-                            }
-                        );
-                    }
-                    // The 'backToKingdomSelectionBtn' is a static button within the contentSection HTML
-                    // and its event listener is attached once on DOMContentLoaded.
-                    // No dynamic creation needed here for it.
-
-                    if (backButton) {
-                        dynamicBackButtonsContainer.appendChild(backButton);
+                if (guideImg) {
+                    if (sectionId === "kingdomSelectionSection") {
+                        guideImg.classList.remove("hidden");
+                    } else {
+                        guideImg.classList.add("hidden");
                     }
                 }
             } else {
@@ -111,21 +63,6 @@ function showSection(sectionId) {
             }
         }
     });
-}
-
-// Function to create a back button dynamically
-function createBackButton(id, text, iconPathD, onClickHandler) {
-    const button = document.createElement('button');
-    button.id = id;
-    button.className = "bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded-full transition duration-300 flex items-center mb-2"; // mb-2 for stacking
-    button.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="${iconPathD}" clip-rule="evenodd" />
-        </svg>
-        ${text}
-    `;
-    button.addEventListener('click', onClickHandler);
-    return button;
 }
 
 // Function to generate questions (for both pre and post tests)
@@ -282,15 +219,13 @@ function checkAnswers(questions, containerId, resultId, testType) {
     return { score, answers: currentTestAnswers };
 }
 
-// Function to save score to Firestore
-async function saveScore(lessonId, testType, score, answers) { // Added 'answers' parameter
+// Function to save score to MySQL
+async function saveScore(lessonId, testType, score, answers) {
     if (!currentUserId || !lessonId) {
         console.error("ไม่สามารถบันทึกคะแนนได้: ผู้ใช้ยังไม่ได้เข้าสู่ระบบหรือไม่มีรหัสบทเรียน");
         showMessageBox("ข้อผิดพลาด", "ไม่สามารถบันทึกคะแนนได้ กรุณาเข้าสู่ระบบอีกครั้ง");
         return;
     }
-
-
 
     try {
         await fetch('/api/scores', {
@@ -298,67 +233,6 @@ async function saveScore(lessonId, testType, score, answers) { // Added 'answers
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
             body: JSON.stringify({ lessonId, testType, score, answers })
         });
-
-
-        // ** NEW: Send score data to Google Apps Script (Single Sheet) **
-        if (GOOGLE_APPS_SCRIPT_WEB_APP_URL && GOOGLE_APPS_SCRIPT_WEB_APP_URL !== 'https://script.google.com/macros/s/AKfycby3yHKre1_e5YdHLVDx7qvLecVZf7t2mN9UeCTMFTPUbgs5HNd4A69nW1MrFE3QzEkW/exec') {
-            // Ensure currentUserProfile is loaded before sending score data
-            if (Object.keys(currentUserProfile).length === 0 || currentUserProfile.studentId === undefined || currentUserProfile.studentId === null) {
-                // If profile is not fully loaded or studentId is missing, try to fetch it now.
-                const response = await fetch('/api/profile', { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } });
-                const userProfileSnap = await response.json();
-                if (Object.keys(userProfileSnap).length > 0) {
-                    currentUserProfile = userProfileSnap;
-
-                } else {
-                    console.warn("User profile not found for score sync. Cannot send full data to Google Sheet.");
-                    showMessageBox("ข้อควรทราบ", "โปรดกรอกข้อมูลโปรไฟล์ของคุณให้ครบถ้วน (โดยเฉพาะ เลขประจำตัว) เพื่อให้ข้อมูลคะแนนปรากฏใน Google Sheet ได้สมบูรณ์");
-                    return; // Stop here if studentId cannot be determined
-                }
-            }
-
-            // Ensure studentId is available and valid before sending
-            if (currentUserProfile.studentId === undefined || currentUserProfile.studentId === null) {
-                console.error("ไม่สามารถส่งข้อมูลคะแนนไป Google Sheet ได้: ไม่พบ 'เลขประจำตัว' ในโปรไฟล์ผู้ใช้");
-                showMessageBox("ข้อผิดพลาด", "ไม่สามารถส่งข้อมูลคะแนนไป Google Sheet ได้ โปรดกรอก 'เลขประจำตัว' ในโปรไฟล์ของคุณก่อน");
-                return;
-            }
-
-            try {
-                const scoreDataToSend = {
-                    type: 'score', // Indicate data type
-                    data: {
-                        uid: currentUserId, // Firebase UID (for internal tracking if needed)
-                        lessonId: lessonId, // For internal tracking in Apps Script if needed for future logic
-                        studentId: currentUserProfile.studentId, // 'เลขประจำตัว' for Sheets lookup
-                        fullName: currentUserProfile.fullName || '',
-                        class: currentUserProfile.class || '',
-                        preScore: dataToSave.preScore,
-                        postScore: dataToSave.postScore
-                    }
-                };
-                const response = await fetch(GOOGLE_APPS_SCRIPT_WEB_APP_URL, {
-                    method: 'POST',
-                    mode: 'cors', // Enable CORS
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(scoreDataToSend)
-                });
-
-                const result = await response.json();
-                if (result.status === 'success') {
-
-                } else {
-                    console.error("ข้อผิดพลาดในการส่งข้อมูลคะแนนไป Google Sheet:", result.message);
-                }
-            } catch (appsScriptError) {
-                console.error("ข้อผิดพลาดในการเชื่อมต่อ Google Apps Script สำหรับคะแนน:", appsScriptError);
-            }
-        } else {
-            console.warn("ไม่ได้ตั้งค่า GOOGLE_APPS_SCRIPT_WEB_APP_URL หรือยังเป็นค่าเริ่มต้น ไม่สามารถส่งข้อมูลคะแนนไป Google Sheet ได้");
-        }
-
     } catch (error) {
         console.error(`ข้อผิดพลาดในการบันทึกคะแนน ${testType} สำหรับบทเรียน ${lessonId}:`, error.message);
         showMessageBox("ข้อผิดพลาด", `ไม่สามารถบันทึกคะแนน${testType}ได้: ${error.message}`);
@@ -378,9 +252,8 @@ async function loadLesson(lessonId) {
 
     document.getElementById('lessonTitle').textContent = window.currentLessonData.title;
 
-    // Fetch current user profile to be ready for sending to Apps Script
-    // This is now done once user is authenticated
-    if (currentUserId) { // Only fetch if user ID is available
+    // Fetch current user profile
+    if (currentUserId) { 
         try {
             const response = await fetch('/api/profile', { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } });
             const userProfileSnap = await response.json();
