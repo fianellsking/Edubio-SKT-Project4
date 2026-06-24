@@ -1,0 +1,21 @@
+{
+  "name": "edubio-skt-project4",
+  "version": "1.0.0",
+  "description": "Edubio SKT Project 4",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "build:css": "npx @tailwindcss/cli -i ./public/css/input.css -o ./public/css/tailwind.css"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.19.2",
+    "google-auth-library": "^9.10.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.10.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.1",
+    "tailwindcss": "^4.3.1"
+  }
+}

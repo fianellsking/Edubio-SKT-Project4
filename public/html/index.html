@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduBio - ยินดีต้อนรับ</title>
+    <link rel="stylesheet" href="/css/login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+Thai:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body class="font-inter">
+    <div class="container bg-white p-8 sm:p-12 rounded-3xl shadow-2xl max-w-lg w-full relative z-10 animate-fade-in-up">
+        <span class="absolute top-4 left-4 text-5xl opacity-30 animate-bounce-slow" style="animation-delay: 0s;">🌱</span>
+        <span class="absolute bottom-4 right-4 text-5xl opacity-30 animate-bounce-slow" style="animation-delay: 0.5s;">🔬</span>
+        <span class="absolute top-1/4 right-8 text-4xl opacity-30 animate-bounce-slow" style="animation-delay: 1s;">🦠</span>
+        <span class="absolute bottom-1/4 left-8 text-4xl opacity-30 animate-bounce-slow" style="animation-delay: 1.5s;">🌿</span>
+
+        <!-- Header Section -->
+        <div class="text-center mb-8">
+            <h1 class="text-5xl font-extrabold text-green-800 mb-4">
+                EduBio
+            </h1>
+            <p class="text-gray-700 text-lg">แหล่งเรียนรู้ชีววิทยาออนไลน์ของคุณ</p>
+        </div>
+
+        <!-- Auth Buttons Section (Google Only) -->
+        <div class="flex flex-col items-center justify-center space-y-5 mt-4">
+            <div id="g_id_onload"
+                 data-client_id="1031800062796-68s0i81a9h3k83abl7689p466tm7vdf1.apps.googleusercontent.com"
+                 data-context="signin"
+                 data-ux_mode="popup"
+                 data-callback="handleCredentialResponse"
+                 data-auto_prompt="false">
+            </div>
+            
+            <div class="g_id_signin"
+                 data-type="standard"
+                 data-shape="pill"
+                 data-theme="filled_blue"
+                 data-text="signin_with"
+                 data-size="large"
+                 data-logo_alignment="left">
+            </div>
+            <p class="text-xs text-gray-500 mt-2">โปรดใช้อีเมล @sk-thonburi.ac.th เท่านั้น</p>
+        </div>
+
+        <!-- Optional: Footer text or links -->
+        <p class="text-center text-gray-500 text-sm mt-8">
+            &copy; 2025 EduBio. All rights reserved.
+        </p>
+    </div>
+
+    <!-- Message Modal -->
+    <div class="modal" id="messageModal">
+        <div class="modal-content-custom">
+            <h2 id="messageModalTitle" class="text-2xl font-bold mb-6 text-gray-800"></h2>
+            <p id="messageModalBody" class="text-gray-700"></p>
+            <button id="messageModalCloseBtn" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out mt-6">
+                ตกลง
+            </button>
+        </div>
+    </div>
+    <script type="module" src="/js/login.js"></script>
+</body>
+</html>
