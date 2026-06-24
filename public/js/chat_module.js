@@ -54,6 +54,30 @@ function removeTypingIndicator() {
 
 async function sendMessageToAI(userMessage, context = {}) {
     appendMessage('user', userMessage);
+    
+    // Check if user is inputting an API key
+    if (userMessage.startsWith('AIzaSy')) {
+        localStorage.setItem('gemini_api_key', userMessage.trim());
+        const chatInput = document.getElementById('chatInput');
+        if (chatInput) {
+            chatInput.value = '';
+            chatInput.disabled = false;
+        }
+        appendMessage('ai', 'บันทึก API Key สำเร็จ! ตอนนี้คุณสามารถถามคำถามได้เลยครับ');
+        return;
+    }
+
+    let apiKey = localStorage.getItem('gemini_api_key') || (typeof GEMINI_API_KEY !== 'undefined' ? GEMINI_API_KEY : "");
+    if (!apiKey) {
+        appendMessage('ai', 'ระบบต้องการ Gemini API Key ฟรี เพื่อเริ่มทำงาน<br>กรุณารับฟรีได้ที่ <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-blue-600 underline">Google AI Studio</a><br>และนำ API Key (ที่ขึ้นต้นด้วย AIzaSy) มาพิมพ์ลงในช่องแชทนี้ได้เลยครับ');
+        const chatInput = document.getElementById('chatInput');
+        if (chatInput) {
+            chatInput.value = '';
+            chatInput.disabled = false;
+        }
+        return;
+    }
+
     appendMessage('ai', '', true); // แสดง typing indicator
 
     // ถ้ายังไม่เคยสนทนา → ใส่ prompt context เป็นข้อความแรก
@@ -80,8 +104,7 @@ async function sendMessageToAI(userMessage, context = {}) {
         }
     };
 
-    const apiKey = typeof GEMINI_API_KEY !== 'undefined' ? GEMINI_API_KEY : "";
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
     try {
         const response = await fetch(apiUrl, {
@@ -92,6 +115,16 @@ async function sendMessageToAI(userMessage, context = {}) {
 
         const result = await response.json();
         removeTypingIndicator();
+
+        if (result.error) {
+            if (result.error.code === 403 || result.error.code === 400 || result.error.code === 429) {
+                appendMessage('ai', `API Key มีปัญหาหรือหมดโควต้า (${result.error.message})<br>กรุณารับ API Key อันใหม่จาก <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-blue-600 underline">Google AI Studio</a> แล้วนำมาพิมพ์ในช่องแชทครับ`);
+                localStorage.removeItem('gemini_api_key');
+            } else {
+                appendMessage('ai', `เกิดข้อผิดพลาดจาก Gemini: ${result.error.message}`);
+            }
+            return;
+        }
 
         const aiText = result?.candidates?.[0]?.content?.parts?.[0]?.text || "ขออภัย ไม่สามารถตอบได้ครับ";
         appendMessage('ai', aiText);
