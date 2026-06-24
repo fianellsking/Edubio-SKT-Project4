@@ -278,16 +278,15 @@ async function loadLesson(lessonId) {
     }
 
 
-    // Always start with Pre-test section, then load state
-    showSection('preTestSection');
-    loadSavedLessonState(lessonId); // Call a new function to handle loading state
+    // Do not show preTestSection synchronously. Let loadSavedLessonState decide.
+    loadSavedLessonState(lessonId); 
 }
 
 // New function to load saved lesson state from Firestore
 async function loadSavedLessonState(lessonId) {
     // Only attempt to load if user is logged in
     if (!currentUserId) {
-
+        showSection('preTestSection');
         renderQuestions(window.currentLessonData.preTest, 'preTestQuestions', 'pre');
         document.getElementById('continueToContentBtn').classList.add('hidden'); // Ensure hidden initially
         document.getElementById('submitPreTestBtn').disabled = false; // Ensure enabled
@@ -307,29 +306,20 @@ async function loadSavedLessonState(lessonId) {
                 userPreTestAnswers = savedData.pre_answers;
                 preTestScore = savedData.pre_score || 0; // Ensure score is loaded too
 
-                // Render pre-test with saved answers and show explanations
-                renderQuestions(window.currentLessonData.preTest, 'preTestQuestions', 'pre', true, userPreTestAnswers);
-                document.getElementById('preTestResult').textContent = `คุณทำถูก ${preTestScore} ข้อ จาก ${window.currentLessonData.preTest.length} ข้อ`;
-                document.getElementById('preTestResult').classList.remove('hidden');
-                document.getElementById('continueToContentBtn').classList.remove('hidden'); // Show continue button
-                document.getElementById('submitPreTestBtn').disabled = true; // Disable submit button
-
-                // Auto advance to lesson content
-                showMessageBox("ข้ามแบบทดสอบก่อนเรียน", "คุณได้ทำแบบทดสอบก่อนเรียนบทนี้ไปแล้ว ระบบจะนำคุณเข้าสู่เนื้อหาบทเรียน", () => {
-                    if (currentLessonId === 'taxonomy') {
-                        showSection('taxonomyIntroSection');
-                        document.getElementById('generalIntroTitle').textContent = "ภาพรวมการจำแนกสิ่งมีชีวิต";
-                        document.getElementById('generalIntroContent').innerHTML = window.currentLessonData.content.introductionText;
-                        renderGeneralTaxonomyVideos();
-                        renderGeneralTaxonomySlides();
-                        setupGeneralSlidesToggle();
-                    } else {
-                        showSection('contentSection');
-                        renderLessonContent();
-                    }
-                });
+                // Automatically advance to lesson content without showing pre-test
+                if (currentLessonId === 'taxonomy') {
+                    showSection('taxonomyIntroSection');
+                    document.getElementById('generalIntroTitle').textContent = "ภาพรวมการจำแนกสิ่งมีชีวิต";
+                    document.getElementById('generalIntroContent').innerHTML = window.currentLessonData.content.introductionText;
+                    renderGeneralTaxonomyVideos();
+                    renderGeneralTaxonomySlides();
+                    setupGeneralSlidesToggle();
+                } else {
+                    showSection('contentSection');
+                    renderLessonContent();
+                }
             } else {
-
+                showSection('preTestSection');
                 renderQuestions(window.currentLessonData.preTest, 'preTestQuestions', 'pre');
                 document.getElementById('continueToContentBtn').classList.add('hidden'); // Hide continue button
                 document.getElementById('submitPreTestBtn').disabled = false; // Ensure submit button is enabled
@@ -359,6 +349,7 @@ async function loadSavedLessonState(lessonId) {
         console.error("ข้อผิดพลาดในการโหลดข้อมูลบทเรียนที่บันทึกไว้:", error.message);
         showMessageBox("ข้อผิดพลาด", "ไม่สามารถโหลดข้อมูลบทเรียนที่บันทึกไว้ได้: " + error.message);
         // Fallback to rendering fresh pre-test if load fails
+        showSection('preTestSection');
         renderQuestions(window.currentLessonData.preTest, 'preTestQuestions', 'pre');
         document.getElementById('continueToContentBtn').classList.add('hidden');
         document.getElementById('submitPreTestBtn').disabled = false;
