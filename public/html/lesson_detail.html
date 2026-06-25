@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduBio - บทเรียน</title>
+    <title>EduPhys - บทเรียนฟิสิกส์</title>
     <link rel="stylesheet" href="/css/tailwind.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+Thai:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/lesson_detail.css">
@@ -38,11 +38,10 @@
                 <div id="preTestResult" class="mt-4 p-3 bg-lime-100 rounded-md text-lime-900 hidden">
                     <!-- Pre-test results will be shown here -->
                 </div>
+                <button id="continueToContentBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full transition duration-300 ease-in-out mt-4 hidden">
+                    เข้าสู่เนื้อหาบทเรียน
+                </button>
                 <div class="flex justify-center gap-4 mt-4">
-                    <!-- continueToContentBtn is now for all lessons to proceed to content/kingdom selection -->
-                    <button id="continueToContentBtn" class="bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105 hidden">
-                        เริ่มเรียน
-                    </button>
                     <!-- Button to go back to main lessons/home after pre-test -->
                     <button id="backFromPreTestToHomeBtn" class="bg-gray-400 hover:bg-gray-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105 hidden">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
@@ -55,29 +54,35 @@
 <div id="generalSlidesContainer" class="mt-4 hidden"></div>
 
 
-            <!-- Section for Taxonomy Introduction (NEW for general taxonomy videos) -->
-            <div id="taxonomyIntroSection" class="lesson-section mb-8 p-8 bg-emerald-50 rounded-xl shadow-lg border border-emerald-100 hidden">
-                <h2 id="generalIntroTitle" class="text-2xl font-bold text-emerald-800 mb-4"></h2>
-                <div id="generalIntroContent" class="prose max-w-none">
-                    <!-- General introduction text and videos will be loaded here by JavaScript -->
+            <!-- Section for General Taxonomy Introduction (NEW) -->
+            <div id="taxonomyIntroSection" class="lesson-section mb-8 p-8 bg-purple-50 rounded-xl shadow-lg border border-purple-100 hidden">
+                <h2 id="generalIntroTitle" class="text-2xl font-bold text-purple-800 mb-4">ภาพรวมเนื้อหาเรื่องคลื่นกล</h2>
+                <div id="generalIntroContent" class="prose max-w-none text-gray-700">
+                    <!-- General introduction content from JS -->
+                </div>
+                <!-- General Taxonomy Slides Container (Added) -->
+                <div id="generalTaxonomySlidesContainer" class="slides-container hidden">
+                    <!-- Slides content will be injected here by JS -->
+                </div>
+                <!-- Controls for General Slides Toggle (Added) -->
+                <div class="flex justify-center items-center mt-6 space-x-4">
+                    <button id="toggleGeneralSlidesBtn" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-full transition duration-300 ease-in-out hidden">
+                        แสดงสไลด์สรุปเนื้อหา
+                    </button>
                 </div>
                 <div class="flex justify-between items-center mt-6">
-                    <!-- NEW: Button to go back to pre-test from taxonomy intro -->
-                    <button id="backToPreTestFromTaxonomyIntroBtn" class="bg-gray-400 hover:bg-gray-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L7.414 11H16a1 1 0 110 2H7.414l2.879 2.879a1 1 0 01-1.414 1.414l-4.5-4.5a1 1 0 010-1.414l4.5-4.5a1 1 0 011.414 1.414L7.414 9H16a1 1 0 110 2H7.414l2.879 2.879a1 1 0 010-1.414z" clip-rule="evenodd" />
-                        </svg>
+                    <button id="backToPreTestFromTaxonomyIntroBtn" class="bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-6 rounded-full transition duration-300 ease-in-out">
                         ย้อนกลับแบบทดสอบก่อนเรียน
                     </button>
                     <button id="startTaxonomyLessonBtn" class="bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
-                        เริ่มศึกษาอาณาจักรทั้ง5
+                        เข้าสู่บทเรียนคลื่นกล
                     </button>
                 </div>
             </div>
 
             <!-- Section for Kingdom Selection (NEW) -->
             <div id="kingdomSelectionSection" class="lesson-section mb-8 p-8 bg-amber-50 rounded-xl shadow-lg border border-amber-100 hidden">
-                <h2 class="text-2xl font-bold text-amber-800 mb-4">2. เลือกอาณาจักรเพื่อเรียนรู้</h2>
+                <h2 class="text-2xl font-bold text-amber-800 mb-4">2. เลือกหัวข้อเพื่อเรียนรู้</h2>
                 <div id="kingdomSelectionIntro" class="text-gray-700 mb-6">
                     <!-- Introduction text for kingdom selection from JS -->
                 </div>
@@ -85,7 +90,7 @@
                     <!-- Kingdom cards will be rendered here by JavaScript -->
                 </div>
                 <button id="backFromKingdomSelectionToTaxonomyIntroBtn" class="bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-6 rounded-full transition duration-300 ease-in-out mt-6">
-                    ย้อนกลับการจำแนกสิ่งมีชีวิต
+                    ย้อนกลับภาพรวมคลื่นกล
                 </button>
                 <img id="teacherGuide" src="https://i.postimg.cc/7YSXhDrv/KruTang.png" alt="ครูผู้ช่วย" class="teacher-inside" />
             </div>
@@ -98,7 +103,7 @@
                 </div>
                 <div class="flex justify-between items-center mt-4">
                     <button id="backToKingdomSelectionBtn" class="bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-6 rounded-full transition duration-300 ease-in-out">
-                        ย้อนกลับเลือกอาณาจักร
+                        ย้อนกลับเลือกหัวข้อ
                     </button>
                     <button id="finishContentBtn" class="bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
                         ทำแบบทดสอบหลังเรียน

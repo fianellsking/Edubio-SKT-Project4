@@ -245,13 +245,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             // This is a placeholder, you might want to load this from a global config or dedicated collection
             // For now, I'll define a sample structure here for home.js context.
             lessonsData = {
-                "taxonomy": { title: "อนุกรมวิธาน" },
-                "endocrine-system": { title: "ระบบต่อมไร้ท่อ" },
-                "genetics": { title: "พันธุศาสตร์" },
-                "ecology": { title: "นิเวศวิทยา" },
-                "cell-biology": { title: "ชีววิทยาของเซลล์" },
-                "human-anatomy": { title: "กายวิภาคศาสตร์มนุษย์" }
-                // Add more lesson IDs and titles as needed
+                "wave": { title: "คลื่นกล (Mechanical Wave)" },
+                "sound": { title: "เสียงและการได้ยิน (Coming Soon)" },
+                "light": { title: "แสงเชิงกลศาสตร์ (Coming Soon)" }
             };
 
         } else {
@@ -545,40 +541,17 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('closeQuizModalBtn')?.addEventListener('click', closeQuizModal);
 });
 
-const taxonomyQuestions = [
-  { question: "สิ่งมีชีวิตในโดเมน Archaea มีลักษณะอย่างไร?", choices: ["ยูคาริโอต", "โปรคาริโอต", "ไม่มีนิวเคลียส", "มีผนังเซลล์เซลลูโลส"], answer: 1 },
-  { question: "อาณาจักรใดที่มีทั้งโปรคาริโอตและยูคาริโอต?", choices: ["Animalia", "Monela", "Fungi", "Plantae","ไม่มีคำตอบ"], answer: 4 },
-  { question: "ระบบการจัดจำแนกสิ่งมีชีวิตที่ใช้ชื่อวิทยาศาสตร์เรียกว่าอะไร?", choices: ["Binomial nomenclature", "Phylum sorting", "Biocode", "Kingdom grouping"], answer: 0 },
-  { question: "ข้อใดต่อไปนี้ไม่ใช่กลุ่มของสัตว์มีกระดูกสันหลัง (Vertebrates)?", choices: ["สัตว์เลื้อยคลาน", "สัตว์ปีก", "สัตว์ครึ่งบกครึ่งน้ำ", "แมลง"], answer: 3 },
-  { question: "สิ่งมีชีวิตใน Phylum Nematoda มีลักษณะอย่างไร?", choices: ["ลำตัวแบน", "ลำตัวกลมเรียวยาว", "มีขาเป็นข้อปล้อง", "ลำตัวแบ่งเป็นปล้องชัดเจน"], answer: 1 },
-  { question: "สัตว์ในกลุ่ม Mammalia มีลักษณะเด่นอะไร?", choices: ["มีเปลือกแข็งหุ้มตัว", "มีขนปกคลุมและเลี้ยงลูกด้วยนม", "หายใจด้วยเหงือก", "ตัวเย็นเลือดเย็น"], answer: 1 },
-  { question: "ข้อใดคือการนำหลัก Taxonomy ไปใช้ในชีวิตจริง?", choices: ["การตั้งชื่อเล่นสัตว์เลี้ยง", "การจำแนกเชื้อโรคเพื่อรักษาโรค", "การเลือกซื้อพันธุ์ไม้ประดับ", "การออกแบบเครื่องมือทางการแพทย์"], answer: 1 },
-  { question: "Phylum Chordata ประกอบด้วยลักษณะสำคัญข้อใด?", choices: ["มีเส้นประสาทด้านท้อง", "มีแกนสันหลังหรือ notochord", "มีหนามที่ผิวหนัง", "มีเปลือกแข็งหุ้มตัว"], answer: 1 },
-  { question: "สัตว์ในกลุ่ม Amphibia มีลักษณะใด?", choices: ["อยู่เฉพาะในน้ำ", "มีขนปกคลุม", "มีชีวิตทั้งในน้ำและบนบก", "มีเปลือกแข็ง"], answer: 2 },
-  { question: "ข้อใดคือลักษณะเด่นของสัตว์ใน Phylum Arthropoda?", choices: ["ลำตัวแบ่งเป็นส่วนชัดเจน ขาเป็นข้อปล้อง", "ไม่มีเปลือกแข็ง", "ลำตัวกลมเรียวยาว", "ไม่มีตา"], answer: 0 },
-  { question: "สิ่งมีชีวิตใดจัดอยู่ใน Kingdom Protista?", choices: ["ไวรัส", "แพลงก์ตอนพืช", "เห็ดรา", "แบคทีเรีย"], answer: 1 },
-  { question: "ชื่อวิทยาศาสตร์ต้องเขียนอย่างไรตามหลักสากล?", choices: ["ตัวแรกพิมพ์เล็ก ตัวที่สองพิมพ์ใหญ่", "ทั้งสองคำพิมพ์ใหญ่", "ตัวแรกขึ้นต้นพิมพ์ใหญ่ ตัวที่สองพิมพ์เล็ก", "เขียนคำเดียว"], answer: 2 },
-  { question: "สัตว์ใน Phylum Platyhelminthes มีลักษณะเด่นข้อใด?", choices: ["ลำตัวกลมเรียวยาว", "ลำตัวแบนปากเดียวไม่มีช่องว่างในลำตัว", "มีขาเป็นข้อปล้อง", "มีเปลือกแข็ง"], answer: 1 },
-  { question: "ตัวอย่างของสัตว์ใน Phylum Annelida ได้แก่ข้อใด?", choices: ["แมงมุม", "กุ้ง", "ไส้เดือนดิน", "ดาวทะเล"], answer: 2 },
-  { question: "ข้อใดเป็นสิ่งมีชีวิตใน Kingdom Fungi?", choices: ["ยีสต์", "อะมีบา", "แบคทีเรีย", "แพลงก์ตอน"], answer: 0 },
-  { question: "สิ่งมีชีวิตกลุ่มใดมีผนังเซลล์ประกอบด้วยไคติน (Chitin)?", choices: ["พืช", "เห็ดรา", "แบคทีเรีย", "สัตว์"], answer: 1 },
-  { question: "สิ่งมีชีวิตใน Phylum Cnidaria มีตัวอย่างใด?", choices: ["ปะการัง", "แมงป่อง", "หอยทาก", "ผึ้ง"], answer: 0 },
-  { question: "ข้อใดต่อไปนี้ไม่ใช่สิ่งมีชีวิตที่จัดอยู่ใน Phylum Mollusca?", choices: ["หอย", "ปลาหมึก", "ปลิงทะเล", "หอยทาก"], answer: 2 },
-  { question: "Kingdom Plantae มีลักษณะสำคัญข้อใด?", choices: ["เคลื่อนไหวได้อย่างอิสระ", "สร้างอาหารเองโดยสังเคราะห์แสง", "ไม่มีผนังเซลล์", "กินสิ่งมีชีวิตอื่นเป็นอาหาร"], answer: 1 },
-  { question: "Phylum Arthropoda แบ่งออกเป็นกี่กลุ่มหลัก?", choices: ["2", "3", "4", "5"], answer: 3 },
-  { question: "ข้อใดเป็นตัวอย่างของสัตว์ไม่มีกระดูกสันหลัง?", choices: ["ปลา", "มนุษย์", "หมึก", "นก"], answer: 2 },
-  { question: "Phylum Echinodermata มีระบบการเคลื่อนที่พิเศษที่เรียกว่าอะไร?", choices: ["ระบบท่อน้ำ (Water vascular system)", "กล้ามเนื้อโครงสร้างแข็ง", "ขาเป็นข้อปล้อง", "ขนปกคลุม"], answer: 0 },
-  { question: "สัตว์ใน Phylum Porifera มีลักษณะเด่นอะไร?", choices: ["ไม่มีรูพรุน", "มีเนื้อเยื่อแท้จริง", "มีรูพรุนและไม่มีอวัยวะแท้จริง", "มีสมองขนาดใหญ่"], answer: 2 },
-  { question: "ข้อใดต่อไปนี้จัดเป็น Vertebrates?", choices: ["แมงป่อง", "ปลาดุก", "ดาวทะเล", "เห็ด"], answer: 1 },
-  { question: "ลักษณะเด่นของ Phylum Chordata คืออะไร?", choices: ["มีสมองใหญ่", "มีแกนสันหลังหรือ notochord ในบางช่วงของชีวิต", "มีขาเป็นข้อปล้อง", "มีเปลือกแข็ง"], answer: 1 },
-  { question: "ข้อใดคือชื่อวิทยาศาสตร์ของมนุษย์?", choices: ["Pan troglodytes", "Homo erectus", "Homo sapiens", "Australopithecus afarensis"], answer: 2 },
-  { question: "สัตว์เลือดอุ่นมีอยู่ในกลุ่มใดบ้าง?", choices: ["สัตว์ครึ่งบกครึ่งน้ำและสัตว์เลื้อยคลาน", "สัตว์ปีกและสัตว์เลี้ยงลูกด้วยนม", "สัตว์เลื้อยคลานและปลา", "สัตว์ครึ่งบกครึ่งน้ำและปลา"], answer: 1 },
-  { question: "ข้อใดคือสิ่งมีชีวิตใน Phylum Chordata ที่อาศัยอยู่ในน้ำตลอดชีวิต?", choices: ["ปลาวาฬ", "แมงกะพรุน", "ปลาแซลมอน", "ปะการัง"], answer: 2 },
-  { question: "สิ่งมีชีวิตกลุ่มใดสร้างอาหารเองไม่ได้?", choices: ["พืช", "โปรติสต์", "สัตว์", "สาหร่าย"], answer: 2 },
-  { question: "ข้อใดต่อไปนี้อยู่ในอาณาจักร Monera?", choices: ["รา", "แบคทีเรีย", "อะมีบา", "เห็ด"], answer: 1 },
-  { question: "ข้อใดคือลักษณะสำคัญของสัตว์ใน Phylum Platyhelminthes?", choices: ["มีร่างกายแบนเรียบ", "มีเปลือกแข็ง", "มีขนปกคลุม", "มีระบบท่อน้ำ"], answer: 0 },
-  { question: "Kingdom Protista ประกอบด้วยสิ่งมีชีวิตลักษณะใด?", choices: ["หลายเซลล์ที่ซับซ้อน", "เซลล์เดียวหรือกลุ่มเซลล์ง่ายๆ ส่วนใหญ่มีนิวเคลียส", "เซลล์ไม่มีนิวเคลียส", "เฉพาะสิ่งมีชีวิตที่สังเคราะห์แสง"], answer: 1 },
-  { question: "ข้อใดไม่เกี่ยวข้องกับระบบการจัดจำแนกสิ่งมีชีวิต?", choices: ["การตั้งชื่อวิทยาศาสตร์", "การศึกษาความสัมพันธ์ทางวิวัฒนาการ", "การวาดภาพประกอบ", "การแบ่งกลุ่มตามโครงสร้าง"], answer: 2 }
+const physicsQuestions = [
+  { question: "คลื่นกลจำเป็นต้องอาศัยสิ่งใดในการเดินทาง?", choices: ["แสง", "ตัวกลาง", "ความร้อน", "สุญญากาศ"], answer: 1 },
+  { question: "สมการอัตราเร็วคลื่นคือข้อใด?", choices: ["v = s × t", "v = f / λ", "v = f λ", "v = λ / T^2"], answer: 2 },
+  { question: "ข้อใดเป็นคลื่นตามยาว?", choices: ["คลื่นเสียง", "คลื่นแสง", "คลื่นในเส้นเชือก", "คลื่นวิทยุ"], answer: 0 },
+  { question: "สันคลื่น (Crest) มีการกระจัดเป็นอย่างไร?", choices: ["ศูนย์", "ติดลบมากที่สุด", "บวกมากที่สุด", "ไม่แน่นอน"], answer: 2 },
+  { question: "หน่วยของความถี่ (Frequency) คือข้อใด?", choices: ["วินาที", "เมตร", "เฮิรตซ์ (Hz)", "นิวตัน"], answer: 2 },
+  { question: "แอมพลิจูดบ่งบอกถึงสิ่งใดของคลื่น?", choices: ["ความเร็ว", "พลังงาน", "เวลา", "ทิศทาง"], answer: 1 },
+  { question: "คลื่นแม่เหล็กไฟฟ้าสามารถเดินทางในสุญญากาศได้หรือไม่?", choices: ["ได้", "ไม่ได้", "ได้เฉพาะคลื่นวิทยุ", "ได้เฉพาะแสงแดด"], answer: 0 },
+  { question: "คาบ (T) และความถี่ (f) สัมพันธ์กันตามข้อใด?", choices: ["T = f", "T = 1/f", "T + f = 0", "T = f^2"], answer: 1 },
+  { question: "คลื่นความถี่ 5 Hz มีความยาวคลื่น 4 เมตร จะมีความเร็วเท่าใด?", choices: ["1.25 m/s", "9 m/s", "20 m/s", "0.8 m/s"], answer: 2 },
+  { question: "เมื่อโยนก้อนหินลงน้ำ อนุภาคของน้ำจะเคลื่อนที่แบบใด?", choices: ["พุ่งไปข้างหน้า", "จมลงก้นสระ", "ฮาร์มอนิกอย่างง่าย (SHM)", "หมุนเป็นวงกลม"], answer: 2 }
 ];
 
 function generateDailyQuestions() {
@@ -589,7 +562,7 @@ function generateDailyQuestions() {
     return;
   }
 
-  const shuffled = taxonomyQuestions.sort(() => 0.5 - Math.random());
+  const shuffled = physicsQuestions.sort(() => 0.5 - Math.random());
   const selected = shuffled.slice(0, 3);
   renderQuizPopup(selected, todayKey);
 }

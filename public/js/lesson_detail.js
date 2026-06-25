@@ -320,9 +320,9 @@ async function loadSavedLessonState(lessonId) {
                 preTestScore = savedData.pre_score || 0; // Ensure score is loaded too
 
                 // Automatically advance to lesson content without showing pre-test
-                if (currentLessonId === 'taxonomy') {
+                if (['taxonomy', 'wave'].includes(currentLessonId)) {
                     showSection('taxonomyIntroSection');
-                    document.getElementById('generalIntroTitle').textContent = "ภาพรวมการจำแนกสิ่งมีชีวิต";
+                    document.getElementById('generalIntroTitle').textContent = "ภาพรวมเนื้อหาเรื่องคลื่นกล";
                     document.getElementById('generalIntroContent').innerHTML = window.currentLessonData.content.introductionText;
                     renderGeneralTaxonomyVideos();
                     renderGeneralTaxonomySlides();
@@ -372,11 +372,11 @@ async function loadSavedLessonState(lessonId) {
 // Function to render general taxonomy videos (if they exist)
 function renderGeneralTaxonomyVideos() {
     const generalIntroContent = document.getElementById('generalIntroContent');
-    if (currentLessonId === 'taxonomy' && window.currentLessonData.content.generalVideoUrls && generalIntroContent) {
+    if (['taxonomy', 'wave'].includes(currentLessonId) && window.currentLessonData.content.generalVideoUrls && generalIntroContent) {
         const videoHtmlArray = window.currentLessonData.content.generalVideoUrls.map(url => `
             <div class="video-responsive mt-6">
                 <iframe src="${url}?autoplay=0&controls=1&modestbranding=1&rel=0" 
-                        title="วิดีโอการจำแนกสิ่งมีชีวิต" frameborder="0" 
+                        title="วิดีโอแนะนำบทเรียนฟิสิกส์" frameborder="0" 
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
         `);
@@ -676,9 +676,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             showMessageBox("ผลคะแนนก่อนเรียน", `คุณทำได้ ${preTestScore} คะแนน`, () => {
                 // After closing message box, advance to lesson content
-                if (currentLessonId === 'taxonomy') {
+                if (['taxonomy', 'wave'].includes(currentLessonId)) {
                     showSection('taxonomyIntroSection');
-                    document.getElementById('generalIntroTitle').textContent = "ภาพรวมการจำแนกสิ่งมีชีวิต";
+                    document.getElementById('generalIntroTitle').textContent = "ภาพรวมเนื้อหาเรื่องคลื่นกล";
                     document.getElementById('generalIntroContent').innerHTML = window.currentLessonData.content.introductionText;
                     renderGeneralTaxonomyVideos();
                     renderGeneralTaxonomySlides();
@@ -695,9 +695,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // This button (Continue to Content) now only functions for all lessons to proceed to content/kingdom selection.
     if (continueToContentBtn) {
         continueToContentBtn.addEventListener('click', () => {
-            if (currentLessonId === 'taxonomy') {
-                showSection('taxonomyIntroSection'); // Go to general intro first for taxonomy
-                document.getElementById('generalIntroTitle').textContent = "ภาพรวมการจำแนกสิ่งมีชีวิต";
+            if (['taxonomy', 'wave'].includes(currentLessonId)) {
+                showSection('taxonomyIntroSection'); // Go to general intro first for taxonomy/wave
+                document.getElementById('generalIntroTitle').textContent = "ภาพรวมเนื้อหาเรื่องคลื่นกล";
                 document.getElementById('generalIntroContent').innerHTML = window.currentLessonData.content.introductionText;
                 renderGeneralTaxonomyVideos(); // Render general videos for taxonomy intro
                 renderGeneralTaxonomySlides();
@@ -709,12 +709,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // New button for Taxonomy lesson to proceed from general intro to kingdom selection
+    // New button for Taxonomy/Wave lesson to proceed from general intro to kingdom selection
     if (startTaxonomyLessonBtn) { // Listener always attached, check lessonId inside
         startTaxonomyLessonBtn.addEventListener('click', () => {
-            if (currentLessonId === 'taxonomy') {
+            if (['taxonomy', 'wave'].includes(currentLessonId)) {
                 showSection('kingdomSelectionSection');
-                startTaxonomyLessonBtn.textContent = 'เริ่มศึกษาอาณาจักรทั้ง5'
+                startTaxonomyLessonBtn.textContent = 'เข้าสู่บทเรียนคลื่นกล'
                 renderKingdomSelection();
             }
         });
@@ -734,7 +734,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     backFromKingdomSelectionToTaxonomyIntroBtn.addEventListener('click', () => {
 
         showSection('taxonomyIntroSection');
-        document.getElementById('generalIntroTitle').textContent = "ภาพรวมการจำแนกสิ่งมีชีวิต";
+        document.getElementById('generalIntroTitle').textContent = "ภาพรวมเนื้อหาเรื่องคลื่นกล";
         document.getElementById('generalIntroContent').innerHTML = window.currentLessonData.content.introductionText;
         renderGeneralTaxonomyVideos();
         renderGeneralTaxonomySlides();

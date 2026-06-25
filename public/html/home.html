@@ -3,7 +3,7 @@
 <head>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <title>EduBio - หน้าหลัก</title>
+ <title>EduPhys - หน้าหลัก (ฟิสิกส์ ม.5)</title>
     <link rel="stylesheet" href="/css/tailwind.css">
  <!-- Google Fonts: Inter for numbers/English, Noto Sans Thai for Thai -->
  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+Thai:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -14,7 +14,7 @@
   <img src="https://i.postimg.cc/bvvCtDTz/istockphoto-1411153646-612x612-removebg-preview.png" alt="ใบไม้บน" class="leaf1">
   <img src="https://i.postimg.cc/x88hr9gP/leaf-vine-vector-vines-cartoon-sticker-599312-wh860-removebg-preview.png" alt="ใบไม้ล่าง" class="leaf2">
   <div class="flex flex-col md:flex-row justify-between items-center mb-8 border-b pb-6">
-  <h1 class="text-4xl font-extrabold text-green-700 mb-4 md:mb-0 drop-shadow-md">EduBio</h1>
+  <h1 class="text-4xl font-extrabold text-blue-700 mb-4 md:mb-0 drop-shadow-md">EduPhys</h1>
   <div class="flex flex-wrap justify-center md:justify-end items-center space-x-2 md:space-x-4">
   <span id="userGreeting" class="text-xl font-semibold text-gray-700 mb-2 md:mb-0">สวัสดี, ผู้ใช้งาน!</span>
   <button id="viewProfileBtn" class="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
@@ -38,23 +38,22 @@
   </div>
  
   <!-- Lesson Cards Section -->
-  <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">เลือกบทเรียน</h2>
+  <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">เลือกบทเรียนฟิสิกส์ ม.5</h2>
   <div id="lessonCardsContainer" class="grid grid-cols-1 gap-8 w-full"> 
-    <div class="lesson-card bg-lime-100 p-6 rounded-xl shadow-lg border border-lime-200 cursor-pointer hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1" data-lesson="taxonomy">
-      <span class="lesson-card-icon text-6xl mb-4 text-center">🍄</span> <!-- Fungi Emoji for Taxonomy -->
-      <h3 class="text-2xl font-bold text-green-800 mb-2 text-center">อนุกรมวิธาน</h3>
-      <p class="text-gray-700 text-center">ศึกษาการจัดหมวดหมู่สิ่งมีชีวิต, หลักการตั้งชื่อ, และความสัมพันธ์ทางวิวัฒนาการ.</p>
+    <div class="lesson-card bg-blue-50 p-6 rounded-xl shadow-lg border border-blue-200 cursor-pointer hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1" data-lesson="wave">
+      <span class="lesson-card-icon text-6xl mb-4 text-center">🌊</span>
+      <h3 class="text-2xl font-bold text-blue-800 mb-2 text-center">คลื่นกล (Mechanical Wave)</h3>
+      <p class="text-gray-700 text-center">ศึกษาความหมายและการจำแนกคลื่น, การเคลื่อนที่แบบฮาร์มอนิกอย่างง่าย (SHM), ส่วนประกอบของคลื่น, และสมการอัตราเร็วคลื่น (v = fλ).</p>
     </div>
-    <!-- Add more lesson cards here if needed. Ensure content remains the same as original. -->
-    <div class="lesson-card bg-green-50 p-6 rounded-xl shadow-lg border border-green-100 opacity-70 cursor-not-allowed">
-      <span class="lesson-card-icon text-6xl mb-4 text-center">🧠</span> <!-- Plant Emoji -->
-      <h3 class="text-2xl font-bold text-green-800 mb-2 text-center">ระบบประสาท (Coming Soon)</h3>
-      <p class="text-gray-700 text-center">ศึกษาเกี่ยวกับการทำงานของระบบประสาท.</p>
+    <div class="lesson-card bg-gray-50 p-6 rounded-xl shadow-lg border border-gray-200 opacity-70 cursor-not-allowed">
+      <span class="lesson-card-icon text-6xl mb-4 text-center">🔊</span>
+      <h3 class="text-2xl font-bold text-gray-700 mb-2 text-center">เสียงและการได้ยิน (Coming Soon)</h3>
+      <p class="text-gray-600 text-center">ศึกษาคุณสมบัติของคลื่นเสียง, ปรากฏการณ์ดอปเพลอร์, และระดับความเข้มเสียง.</p>
     </div>
-    <div class="lesson-card bg-emerald-50 p-6 rounded-xl shadow-lg border border-emerald-100 opacity-70 cursor-not-allowed">
-      <span class="lesson-card-icon text-6xl mb-4 text-center">🏃</span> <!-- Animal Emoji -->
-      <h3 class="text-2xl font-bold text-green-800 mb-2 text-center">การเคลื่อนที่ (Coming Soon)</h3>
-      <p class="text-gray-700 text-center">ศึกษาการเคลื่อนที่ของสิ่งมีชีวิต.</p>
+    <div class="lesson-card bg-gray-50 p-6 rounded-xl shadow-lg border border-gray-200 opacity-70 cursor-not-allowed">
+      <span class="lesson-card-icon text-6xl mb-4 text-center">💡</span>
+      <h3 class="text-2xl font-bold text-gray-700 mb-2 text-center">แสงเชิงกลศาสตร์ (Coming Soon)</h3>
+      <p class="text-gray-600 text-center">ศึกษาการสะท้อนและการหักเหของแสงผ่านเลนส์และกระจกเงา.</p>
     </div>
   </div>
  
