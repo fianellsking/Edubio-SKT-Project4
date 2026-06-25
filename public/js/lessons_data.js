@@ -18,7 +18,7 @@ window.lessonsData = {
                 <p class="text-lg">ยินดีต้อนรับเข้าสู่บทเรียนวิชาฟิสิกส์ ชั้นมัธยมศึกษาปีที่ 5 เรื่อง **คลื่นกล (Mechanical Wave)**! ในบทเรียนนี้เราจะได้เรียนรู้ธรรมชาติของการถ่ายโอนพลังงานผ่านตัวกลาง ส่วนประกอบของคลื่น และสมการการคำนวณที่สำคัญ</p>
             `,
             generalVideoUrls: [
-                "https://www.youtube.com/embed/c38H6KPtcB0",
+                "https://www.youtube.com/embed/9J26ghiAVRs",
                 "https://www.youtube.com/embed/TfYCnOvNnFU"
             ],
             generalSlideUrls: [
@@ -41,7 +41,7 @@ window.lessonsData = {
                             <li>**จำแนกตามความต่อเนื่อง:**<br>- *คลื่นดล (Pulse Wave):* รบกวนสั้นๆ เกิด 1-2 คลื่น<br>- *คลื่นต่อเนื่อง (Continuous Wave):* รบกวนสม่ำเสมอ เกิดคลื่นขบวนยาว</li>
                         </ul>
                     `,
-                    videoUrl: "https://www.youtube.com/embed/c38H6KPtcB0",
+                    videoUrl: "https://www.youtube.com/embed/9J26ghiAVRs",
                     slideTitle: "📄 สไลด์ประเภทของคลื่น",
                     slideUrl: "https://drive.google.com/file/d/1F8lTSig_-I8jKxoWUxE9maZb8698mTiU/preview"
                 },
@@ -58,7 +58,7 @@ window.lessonsData = {
                         </div>
                         <p>ตัวอย่างเช่น เมื่อเราสะบัดเส้นเชือก อนุภาคเชือกแต่ละจุดจะขยับขึ้นลงแนวดิ่งเท่านั้น ไม่ได้พุ่งไปข้างหน้าตามริ้วคลื่น</p>
                     `,
-                    videoUrl: "https://www.youtube.com/embed/tq6XQ1-u84",
+                    videoUrl: "https://www.youtube.com/embed/TfYCnOvNnFU",
                     slideTitle: "📄 สไลด์การเคลื่อนที่ SHM",
                     slideUrl: "https://drive.google.com/file/d/1-H2P5zz6Qlvu3i6tIWAYtLT-q3Ry8y2D/preview"
                 },
