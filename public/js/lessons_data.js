@@ -24,7 +24,7 @@ window.lessonsData = {
             generalSlideUrls: [
                 {
                     title: "📄 สรุปสูตรและบทนำเรื่องคลื่นกล",
-                    url: "https://drive.google.com/file/d/1cSNo-u6AKY8pE0eSku7SjXlSRKTeO2gT/preview"
+                    url: "https://docs.google.com/document/d/1XAVSXq776mSbTbUERkFmLb0IqFNvAeysM-nHUhb_KWM/preview"
                 }
             ],
             kingdoms: {
