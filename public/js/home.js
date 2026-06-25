@@ -142,19 +142,38 @@ async function openDisplayProfileModal() {
             const response = await fetch('/api/scores', { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } });
             const scores = await response.json();
 
-            if (!scores || scores.length === 0) {
+            const validScores = scores ? scores.filter(s => s.lesson_id !== 'taxonomy') : [];
+
+            if (validScores.length === 0) {
                 noScoresMessage.classList.remove('hidden');
             } else {
-                scores.forEach(lessonScore => {
+                validScores.forEach(lessonScore => {
                     const lessonId = lessonScore.lesson_id;
                     const lessonTitle = lessonsData[lessonId] ? lessonsData[lessonId].title : lessonId; 
 
+                    const preVal = lessonScore.pre_score !== null ? `${lessonScore.pre_score} คะแนน` : '-';
+                    const postVal = lessonScore.post_score !== null ? `${lessonScore.post_score} คะแนน` : '-';
+
                     const scoreItem = document.createElement('div');
-                    scoreItem.classList.add('lesson-score-item');
+                    scoreItem.className = "bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-100 shadow-xs mb-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 transition hover:shadow-md";
                     scoreItem.innerHTML = `
-                        <p class="text-sm"><strong>${lessonTitle}:</strong> 
-                        Pre-test: <span class="score-value">${lessonScore.pre_score !== null ? lessonScore.pre_score : 'N/A'}</span>, 
-                        Post-test: <span class="score-value">${lessonScore.post_score !== null ? lessonScore.post_score : 'N/A'}</span></p>
+                        <div class="flex items-center gap-3 text-left">
+                            <span class="text-3xl">🌊</span>
+                            <div>
+                                <h4 class="font-bold text-blue-900 text-md sm:text-lg">${lessonTitle}</h4>
+                                <span class="text-xs text-gray-500">บทเรียนฟิสิกส์ ม.5</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 w-full sm:w-auto justify-end mt-2 sm:mt-0">
+                            <div class="bg-white px-3 py-1.5 rounded-lg border border-amber-200 shadow-2xs text-center min-w-16">
+                                <span class="block text-[10px] font-semibold text-amber-600">ก่อนเรียน</span>
+                                <span class="font-bold text-amber-900 text-sm sm:text-base">${preVal}</span>
+                            </div>
+                            <div class="bg-white px-3 py-1.5 rounded-lg border border-emerald-200 shadow-2xs text-center min-w-16">
+                                <span class="block text-[10px] font-semibold text-emerald-600">หลังเรียน</span>
+                                <span class="font-bold text-emerald-900 text-sm sm:text-base">${postVal}</span>
+                            </div>
+                        </div>
                     `;
                     lessonScoresDisplay.appendChild(scoreItem);
                 });
