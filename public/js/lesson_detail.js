@@ -404,8 +404,9 @@ function renderGeneralTaxonomySlides() {
         const modalId = `generalSlideModal-${index}`;
         const buttonText = slide.title || "📄 ดูสไลด์";
 
+        const iframeId = `generalSlideIframe-${index}`;
         const buttonHtml = `
-            <button onclick="document.getElementById('${modalId}').classList.remove('hidden')"
+            <button onclick="const m=document.getElementById('${modalId}'); const f=document.getElementById('${iframeId}'); if(!f.src) f.src=f.dataset.src; m.classList.remove('hidden');"
                 class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition">
                 ${buttonText}
             </button>
@@ -416,7 +417,7 @@ function renderGeneralTaxonomySlides() {
             <div id="${modalId}" class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 hidden">
                 <div class="bg-white rounded-2xl p-4 w-full max-w-4xl shadow-2xl flex flex-col items-center relative">
                     <div class="video-responsive w-full rounded-md overflow-hidden shadow">
-                        <iframe src="${slide.url}" width="100%" height="100%" frameborder="0" allow="autoplay"></iframe>
+                        <iframe id="${iframeId}" data-src="${slide.url}" width="100%" height="100%" frameborder="0" allow="autoplay"></iframe>
                     </div>
                     <button onclick="document.getElementById('${modalId}').classList.add('hidden')"
                         class="mt-6 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full transition shadow-lg">
