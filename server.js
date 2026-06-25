@@ -11,10 +11,14 @@ const client = new OAuth2Client(CLIENT_ID);
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Load lesson data into server memory for secure grading
-global.window = {};
-require('./public/js/lessons_data.js');
-const serverLessonsData = global.window.lessonsData;
+// Function to dynamically load latest lesson data into server memory
+function getServerLessonsData() {
+    const lessonPath = path.join(__dirname, 'public', 'js', 'lessons_data.js');
+    delete require.cache[require.resolve(lessonPath)];
+    global.window = {};
+    require(lessonPath);
+    return global.window.lessonsData || {};
+}
 
 // Add headers to fix Google Sign-in Cross-Origin-Opener-Policy error
 app.use((req, res, next) => {
@@ -259,7 +263,8 @@ app.post('/api/scores', authenticateToken, async (req, res) => {
 
 // Secure endpoint to fetch sanitized lesson data (without answers & explanations)
 app.get('/api/client-lessons-data.js', (req, res) => {
-    const clientData = JSON.parse(JSON.stringify(serverLessonsData));
+    const latestLessonsData = getServerLessonsData();
+    const clientData = JSON.parse(JSON.stringify(latestLessonsData));
     for (const key in clientData) {
         const lesson = clientData[key];
         if (lesson.preTest) lesson.preTest.forEach(q => { delete q.answer; delete q.explanation; });
@@ -277,12 +282,13 @@ app.get('/js/lessons_data.js', (req, res) => {
 // Server-side quiz verification endpoint
 app.post('/api/check-answers', (req, res) => {
     try {
+        const latestLessonsData = getServerLessonsData();
         const { lessonId, testType, userSelections } = req.body;
-        if (!lessonId || !testType || !serverLessonsData[lessonId]) {
+        if (!lessonId || !testType || !latestLessonsData[lessonId]) {
             return res.status(400).json({ error: 'Invalid submission' });
         }
         const testKey = testType === 'pre' ? 'preTest' : 'postTest';
-        const questions = serverLessonsData[lessonId][testKey];
+        const questions = latestLessonsData[lessonId][testKey];
         if (!questions) {
             return res.status(400).json({ error: 'Test not found' });
         }
