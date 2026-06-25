@@ -62,7 +62,11 @@ function openProfileModal() {
         .then(userData => {
             if (Object.keys(userData).length > 0) {
                 profileFullNameInput.value = userData.fullName || "";
-                profileClassInput.value = userData.class || "";
+                let userClassStr = userData.class || "";
+                if (userClassStr && !userClassStr.startsWith("ม.") && userClassStr.includes("/")) {
+                    userClassStr = "ม." + userClassStr;
+                }
+                profileClassInput.value = userClassStr;
                 profileNumberInput.value = userData.number !== undefined && userData.number !== null ? userData.number : "";
                 profileStudentIdInput.value = userData.studentId !== undefined && userData.studentId !== null ? userData.studentId : ""; 
             } else {
