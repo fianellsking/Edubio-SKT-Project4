@@ -711,14 +711,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // New button for Taxonomy/Wave lesson to proceed from general intro to kingdom selection
-    if (startTaxonomyLessonBtn) { // Listener always attached, check lessonId inside
+    // Proceed from general intro directly to post-test
+    if (startTaxonomyLessonBtn) {
         startTaxonomyLessonBtn.addEventListener('click', () => {
-            if (['taxonomy', 'wave'].includes(currentLessonId)) {
-                showSection('kingdomSelectionSection');
-                startTaxonomyLessonBtn.textContent = 'เข้าสู่บทเรียนคลื่นกล'
-                renderKingdomSelection();
-            }
+            showSection('postTestSection');
+            renderQuestions(window.currentLessonData.postTest, 'postTestQuestions', 'post');
+            if (submitPostTestBtn) submitPostTestBtn.disabled = false;
         });
     }
     
