@@ -731,19 +731,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     if (backFromKingdomSelectionToTaxonomyIntroBtn) {
-
-    backFromKingdomSelectionToTaxonomyIntroBtn.addEventListener('click', () => {
-
-        showSection('taxonomyIntroSection');
-        document.getElementById('generalIntroTitle').textContent = "ภาพรวมเนื้อหาเรื่องคลื่นกล";
-        document.getElementById('generalIntroContent').innerHTML = window.currentLessonData.content.introductionText;
-        renderGeneralTaxonomyVideos();
-        renderGeneralTaxonomySlides();
-        setupGeneralSlidesToggle();
-    });
-} else {
-    console.warn("ไม่พบปุ่ม backFromKingdomSelectionToTaxonomyIntroBtn ใน DOM");
-}
+        backFromKingdomSelectionToTaxonomyIntroBtn.addEventListener('click', () => {
+            showSection('taxonomyIntroSection');
+            document.getElementById('generalIntroTitle').textContent = "ภาพรวมเนื้อหาเรื่องคลื่นกล";
+            document.getElementById('generalIntroContent').innerHTML = window.currentLessonData.content.introductionText;
+            renderGeneralTaxonomyVideos();
+            renderGeneralTaxonomySlides();
+            setupGeneralSlidesToggle();
+        });
+    }
 
 
     if (backToKingdomSelectionBtn) {
