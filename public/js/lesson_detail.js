@@ -385,22 +385,157 @@ function renderGeneralTaxonomyVideos() {
 }
 
 function renderGeneralTaxonomySlides() {
-    const generalIntroContent = document.getElementById('generalIntroContent'); // The div where general intro content goes
+    const generalIntroContent = document.getElementById('generalIntroContent');
     if (!generalIntroContent) return;
 
-    const slides = window.currentLessonData.content.generalSlideUrls || [];
-    if (slides.length === 0) return; // No slides to render
+    const oldBtnContainer = document.getElementById('generalSlidesButtonsContainer');
+    if (oldBtnContainer) oldBtnContainer.remove();
 
-    // Create a container for the slide buttons
+    if (currentLessonId === 'wave') {
+        const modalId = 'builtinWaveSlideModal';
+        const oldModal = document.getElementById(modalId);
+        if (oldModal) oldModal.remove();
+
+        const slidesHtml = `
+            <div id="${modalId}" class="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50 hidden">
+                <div class="bg-white rounded-3xl p-6 md:p-10 w-[95%] max-w-4xl shadow-2xl flex flex-col relative max-h-[90vh] overflow-hidden border-4 border-blue-600">
+                    
+                    <!-- Header -->
+                    <div class="flex justify-between items-center pb-4 border-b border-gray-200 mb-6">
+                        <div class="flex items-center gap-3">
+                            <span class="text-3xl">🌊</span>
+                            <div>
+                                <h3 class="text-2xl font-bold text-blue-900">สไลด์สรุปสูตรและเนื้อหา: คลื่นกล (Mechanical Wave)</h3>
+                                <p class="text-sm text-gray-500">ฟิสิกส์ ม.5 บทที่ 2</p>
+                            </div>
+                        </div>
+                        <button onclick="document.getElementById('${modalId}').classList.add('hidden')" class="text-gray-400 hover:text-red-600 text-3xl font-bold transition">&times;</button>
+                    </div>
+
+                    <!-- Slide Contents Area -->
+                    <div id="waveSlideDeck" class="flex-1 overflow-y-auto pr-2 space-y-6">
+                        
+                        <!-- Slide 1 -->
+                        <div class="wave-slide block bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-200 shadow-md">
+                            <span class="bg-blue-600 text-white text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider">Slide 1 / 4</span>
+                            <h4 class="text-xl font-bold text-blue-800 mt-3 mb-2">1. ความหมายและการจำแนกประเภทของคลื่น</h4>
+                            <p class="text-gray-700 leading-relaxed mb-4">**คลื่น (Wave)** คือปรากฏการณ์ที่เกิดจากการรบกวนแหล่งกำเนิด ทำให้พลังงานถูกถ่ายโอนออกไป โดยที่อนุภาคตัวกลางเพียงแค่สั่นรอบจุดสมดุล ไม่ได้เคลื่อนที่ลอยตามคลื่นไป</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                <div class="bg-white p-4 rounded-xl border border-blue-100 shadow-sm">
+                                    <p class="font-bold text-blue-700 mb-1">🌊 คลื่นกล (Mechanical Wave)</p>
+                                    <p class="text-gray-600">ต้องอาศัยตัวกลางในการเคลื่อนที่ เช่น คลื่นเสียง, คลื่นน้ำ, คลื่นในเส้นเชือก</p>
+                                </div>
+                                <div class="bg-white p-4 rounded-xl border border-purple-100 shadow-sm">
+                                    <p class="font-bold text-purple-700 mb-1">⚡ คลื่นแม่เหล็กไฟฟ้า (EM Wave)</p>
+                                    <p class="text-gray-600">ไม่ต้องอาศัยตัวกลาง เดินทางในสุญญากาศได้ เช่น แสง, รังสีเอกซ์, คลื่นวิทยุ</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 2 -->
+                        <div class="wave-slide hidden bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-2xl border border-purple-200 shadow-md">
+                            <span class="bg-purple-600 text-white text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider">Slide 2 / 4</span>
+                            <h4 class="text-xl font-bold text-purple-800 mt-3 mb-2">2. ทิศทางการสั่นและการเคลื่อนที่แบบ SHM</h4>
+                            <ul class="space-y-3 text-gray-700 text-sm mb-4">
+                                <li class="flex items-start gap-2">🔹 <span>**คลื่นตามขวาง (Transverse Wave):** อนุภาคสั่นในทิศ *ตั้งฉาก* กับทิศการเคลื่อนที่ของคลื่น เช่น คลื่นเชือก, คลื่นน้ำ, แสง</span></li>
+                                <li class="flex items-start gap-2">🔹 <span>**คลื่นตามยาว (Longitudinal Wave):** อนุภาคสั่นในทิศ *ขนาน* กับทิศการเคลื่อนที่ของคลื่น เช่น คลื่นเสียง, คลื่นสปริง</span></li>
+                            </ul>
+                            <div class="bg-white p-4 rounded-xl border border-purple-200 text-center">
+                                <p class="font-bold text-purple-900">สมการ Simple Harmonic Motion (SHM) ของอนุภาคตัวกลาง:</p>
+                                <p class="text-xl font-extrabold text-purple-700 my-2">y = A sin(ωt) หรือ y = A cos(ωt)</p>
+                                <p class="text-xs text-gray-500">เมื่อ ω = 2πf คือความถี่เชิงมุมของการสั่น</p>
+                            </div>
+                        </div>
+
+                        <!-- Slide 3 -->
+                        <div class="wave-slide hidden bg-gradient-to-br from-green-50 to-teal-50 p-6 rounded-2xl border border-green-200 shadow-md">
+                            <span class="bg-green-600 text-white text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider">Slide 3 / 4</span>
+                            <h4 class="text-xl font-bold text-green-800 mt-3 mb-2">3. ส่วนประกอบสำคัญของคลื่น (Wave Anatomy)</h4>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
+                                <div class="bg-white p-3 rounded-lg border border-green-100"><p class="font-bold text-green-700">สันคลื่น (Crest)</p><p class="text-xs text-gray-600">จุดสูงสุดของคลื่น (+A)</p></div>
+                                <div class="bg-white p-3 rounded-lg border border-green-100"><p class="font-bold text-green-700">ท้องคลื่น (Trough)</p><p class="text-xs text-gray-600">จุดต่ำสุดของคลื่น (-A)</p></div>
+                                <div class="bg-white p-3 rounded-lg border border-green-100"><p class="font-bold text-green-700">แอมพลิจูด (A)</p><p class="text-xs text-gray-600">การกระจัดสูงสุด (บอกพลังงาน)</p></div>
+                                <div class="bg-white p-3 rounded-lg border border-green-100"><p class="font-bold text-green-700">ความยาวคลื่น (λ)</p><p class="text-xs text-gray-600">ระยะระหว่างสันคลื่นติดกัน (m)</p></div>
+                                <div class="bg-white p-3 rounded-lg border border-green-100"><p class="font-bold text-green-700">คาบ (T)</p><p class="text-xs text-gray-600">เวลาครบ 1 ลูกคลื่น (s)</p></div>
+                                <div class="bg-white p-3 rounded-lg border border-green-100"><p class="font-bold text-green-700">ความถี่ (f)</p><p class="text-xs text-gray-600">จำนวนลูกคลื่นใน 1 วินาที (Hz)</p></div>
+                            </div>
+                            <p class="text-center font-bold text-teal-800 mt-4 bg-teal-100 py-2 rounded-lg">ความสัมพันธ์พื้นฐาน: T = 1 / f</p>
+                        </div>
+
+                        <!-- Slide 4 -->
+                        <div class="wave-slide hidden bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-2xl border border-amber-200 shadow-md">
+                            <span class="bg-amber-600 text-white text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider">Slide 4 / 4</span>
+                            <h4 class="text-xl font-bold text-amber-800 mt-3 mb-2">4. สรุปสมการอัตราเร็วคลื่น (Wave Speed)</h4>
+                            <p class="text-gray-700 text-sm mb-4">คลื่นเคลื่อนที่ด้วยความเร็วคงที่ในตัวกลางเดิม จากสูตรพื้นฐาน v = s/t เมื่อพิจารณาครบ 1 ลูกคลื่น จะได้ s = λ และ t = T</p>
+                            <div class="bg-white p-6 rounded-2xl border-2 border-amber-400 text-center shadow-inner">
+                                <p class="text-sm font-semibold text-amber-900 mb-1">สมการสำคัญสุดประจำบท:</p>
+                                <p class="text-4xl font-black text-amber-600 tracking-wider my-2">v = f λ</p>
+                                <p class="text-xs text-gray-500">v = อัตราเร็ว (m/s) | f = ความถี่ (Hz) | λ = ความยาวคลื่น (m)</p>
+                            </div>
+                            <p class="text-xs text-red-600 font-bold mt-4 text-center">⭐ กฎทองคำ: อัตราเร็วคลื่นขึ้นอยู่กับคุณสมบัติของตัวกลางเท่านั้น หากเปลี่ยนความถี่ f ความยาวคลื่น λ จะปรับลด/เพิ่มตามเพื่อให้ค่า v คงที่เสมอ</p>
+                        </div>
+
+                    </div>
+
+                    <!-- Navigation Footer -->
+                    <div class="flex justify-between items-center pt-6 border-t border-gray-200 mt-4">
+                        <button id="prevSlideBtn" onclick="window.changeWaveSlide(-1)" class="bg-gray-200 hover:bg-gray-300 disabled:opacity-40 text-gray-800 font-bold py-2.5 px-6 rounded-xl transition flex items-center gap-2">&larr; ก่อนหน้า</button>
+                        <div id="slideIndicator" class="flex gap-2">
+                            <span class="w-3 h-3 rounded-full bg-blue-600 transition"></span>
+                            <span class="w-3 h-3 rounded-full bg-gray-300 transition"></span>
+                            <span class="w-3 h-3 rounded-full bg-gray-300 transition"></span>
+                            <span class="w-3 h-3 rounded-full bg-gray-300 transition"></span>
+                        </div>
+                        <button id="nextSlideBtn" onclick="window.changeWaveSlide(1)" class="bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white font-bold py-2.5 px-6 rounded-xl shadow-md transition flex items-center gap-2">ถัดไป &rarr;</button>
+                    </div>
+
+                </div>
+            </div>
+        `;
+
+        document.body.insertAdjacentHTML('beforeend', slidesHtml);
+
+        window.currentSlideIndex = 0;
+        window.changeWaveSlide = function(step) {
+            const slides = document.querySelectorAll('.wave-slide');
+            const indicators = document.querySelectorAll('#slideIndicator span');
+            if (!slides.length) return;
+            
+            slides[window.currentSlideIndex].classList.add('hidden');
+            indicators[window.currentSlideIndex].classList.replace('bg-blue-600', 'bg-gray-300');
+            
+            window.currentSlideIndex = Math.max(0, Math.min(slides.length - 1, window.currentSlideIndex + step));
+            
+            slides[window.currentSlideIndex].classList.remove('hidden');
+            indicators[window.currentSlideIndex].classList.replace('bg-gray-300', 'bg-blue-600');
+            
+            document.getElementById('prevSlideBtn').disabled = (window.currentSlideIndex === 0);
+            document.getElementById('nextSlideBtn').disabled = (window.currentSlideIndex === slides.length - 1);
+        };
+
+        const buttonHtml = `
+            <div id="generalSlidesButtonsContainer" class="flex justify-center mt-6">
+                <button onclick="window.currentSlideIndex = 0; window.changeWaveSlide(0); document.getElementById('${modalId}').classList.remove('hidden')"
+                    class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-xl transition transform hover:scale-105 flex items-center gap-2 text-lg">
+                    📄 สรุปสูตรและบทนำเรื่องคลื่นกล (คลิกเปิดสไลด์)
+                </button>
+            </div>
+        `;
+        generalIntroContent.insertAdjacentHTML('beforeend', buttonHtml);
+        return;
+    }
+
+    const slides = window.currentLessonData.content.generalSlideUrls || [];
+    if (slides.length === 0) return;
+
     const slidesButtonsContainer = document.createElement('div');
     slidesButtonsContainer.id = 'generalSlidesButtonsContainer';
-    slidesButtonsContainer.classList.add('flex', 'flex-wrap', 'gap-4', 'mt-6', 'justify-center'); // Add some styling
+    slidesButtonsContainer.classList.add('flex', 'flex-wrap', 'gap-4', 'mt-6', 'justify-center');
 
     slides.forEach((slide, index) => {
-        const modalId = `generalSlideModal-${index}`; // Unique ID for each slide modal
+        const modalId = `generalSlideModal-${index}`;
         const buttonText = slide.title || "📄 ดูสไลด์";
 
-        // Create the button for this slide
         const buttonHtml = `
             <button onclick="document.getElementById('${modalId}').classList.remove('hidden')"
                 class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition">
@@ -409,7 +544,6 @@ function renderGeneralTaxonomySlides() {
         `;
         slidesButtonsContainer.insertAdjacentHTML('beforeend', buttonHtml);
 
-        // Create the modal for this slide and append to body (or a suitable top-level element)
         const modalHtml = `
             <div id="${modalId}" class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 hidden">
                 <div class="bg-white rounded-2xl p-4 w-full max-w-4xl shadow-2xl flex flex-col items-center relative">
@@ -423,10 +557,10 @@ function renderGeneralTaxonomySlides() {
                 </div>
             </div>
         `;
-        document.body.insertAdjacentHTML('beforeend', modalHtml); // Append modal to body
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
     });
 
-    generalIntroContent.insertAdjacentHTML('beforeend', slidesButtonsContainer.outerHTML); // Add the container of buttons
+    generalIntroContent.insertAdjacentHTML('beforeend', slidesButtonsContainer.outerHTML);
 }
 
 function setupGeneralSlidesToggle() {
