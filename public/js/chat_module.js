@@ -225,7 +225,6 @@ ${JSON.stringify(context.lessonsData || chatLessonsData || {})}`;
 
 export function setChatContext(lessons) {
   chatLessonsData = lessons;
-  console.log("[Chat] Context received:", lessons);
 }
 
 export function initChatModule() {
