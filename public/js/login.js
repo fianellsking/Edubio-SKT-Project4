@@ -27,7 +27,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // Handle Google Login Response
-window.handleCredentialResponse = async (response) => {
+window._processGoogleLogin = async (response) => {
     try {
         const res = await fetch('/api/google-login', {
             method: 'POST',

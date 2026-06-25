@@ -7,6 +7,20 @@
     <link rel="stylesheet" href="/css/login.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+Thai:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/tailwind.css">
+    <script>
+        window.handleCredentialResponse = function(response) {
+            if (window._processGoogleLogin) {
+                window._processGoogleLogin(response);
+            } else {
+                const checkInterval = setInterval(() => {
+                    if (window._processGoogleLogin) {
+                        clearInterval(checkInterval);
+                        window._processGoogleLogin(response);
+                    }
+                }, 50);
+            }
+        };
+    </script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body class="font-inter">
