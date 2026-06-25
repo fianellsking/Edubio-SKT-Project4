@@ -6,7 +6,10 @@
 
         <!-- Chat Header -->
         <div class="bg-blue-600 text-white p-4 rounded-t-lg flex justify-between items-center">
-            <h2 class="text-xl font-bold">EduBio AI Chat</h2>
+            <div class="flex items-center space-x-2">
+                <h2 class="text-xl font-bold">EduBio AI Chat</h2>
+                <button id="apiKeyHelpBtn" class="text-xs bg-blue-500 hover:bg-blue-700 px-2.5 py-1 rounded-full text-white border border-blue-300 shadow transition flex items-center gap-1" title="วิธีตั้งค่า API Key ส่วนตัว">🔑 <span class="hidden sm:inline">API Key</span></button>
+            </div>
             <button id="closeChatBtn" class="text-white hover:text-gray-200 transition duration-200">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />

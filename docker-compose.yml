@@ -18,6 +18,9 @@ services:
     build: .
     ports:
       - "3000:3000"
+    volumes:
+      - ./public:/usr/src/app/public
+      - ./server.js:/usr/src/app/server.js
     environment:
       - DB_HOST=db
       - DB_USER=edubio_user

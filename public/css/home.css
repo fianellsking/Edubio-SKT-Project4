@@ -1,22 +1,21 @@
 /* ✅ Updated home.css: Enhanced background with animated gradient and subtle taxonomy-themed patterns (flowers, animals). */
 
-/* General body styles */
-body {
+/* General body styles */body {
   font-family: 'Noto Sans Thai', sans-serif; /* Set main font for Thai */
   margin: 0;
-  /* Use flexbox to center content */
   display: flex;
   flex-direction: column; /* Stack children vertically */
-  justify-content: center; /* Center items vertically along the main axis */
-  align-items: center;   /* Center items horizontally along the cross axis */
+  justify-content: flex-start; /* Ensure top nav bar is never cut off */
+  align-items: center;   /* Center items horizontally */
   min-height: 100vh;
-  padding: 2rem;
+  padding: 2rem 1rem;
   background-image: url("https://i.postimg.cc/fLWbKkm8/green-leaf-background-illustration-free-vector-1.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
   position: relative;
-  overflow: hidden;
+  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-x: hidden;
 }
 
 @keyframes gradientShift {
@@ -31,25 +30,22 @@ body {
 }
 
 /* Floating decorative shapes (soft biology elements) */
-/* Kept these for potential future use or additional subtle effects, but primarily relying on SVG for patterns */
 .decorative-shape {
     position: absolute;
-    background-color: rgba(144, 238, 144, 0.1); /* Light green with high transparency */
-    border-radius: 50%; /* Circles */
-    filter: blur(8px); /* Soft blur */
-    opacity: 0; /* Hidden initially */
-    animation: floatAndFade 20s infinite ease-in-out; /* Float and fade animation */
-    z-index: 0; /* Ensure behind main content */
+    background-color: rgba(144, 238, 144, 0.1);
+    border-radius: 50%;
+    filter: blur(8px);
+    opacity: 0;
+    animation: floatAndFade 20s infinite ease-in-out;
+    z-index: 0;
 }
 
-/* Individual shape sizes and positions for varied appearance */
 .shape-1 { width: 100px; height: 100px; top: 10%; left: 5%; animation-delay: 0s; }
 .shape-2 { width: 70px; height: 70px; bottom: 15%; right: 10%; animation-delay: 3s; }
 .shape-3 { width: 120px; height: 120px; top: 30%; right: 5%; animation-delay: 6s; }
 .shape-4 { width: 90px; height: 90px; bottom: 5%; left: 20%; animation-delay: 9s; }
 .shape-5 { width: 80px; height: 80px; top: 50%; left: 2%; animation-delay: 12s; }
 .shape-6 { width: 110px; height: 110px; bottom: 25%; left: 40%; animation-delay: 15s; }
-
 
 @keyframes floatAndFade {
     0% { transform: translateY(0) scale(0.7); opacity: 0; }
@@ -58,16 +54,15 @@ body {
     100% { transform: translateY(-50px) scale(1.1); opacity: 0; }
 }
 
-
 .container {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(8px);
   border-radius: 1.5rem;
   padding: 2.5rem;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1), 0 0 0 5px rgba(134, 239, 172, 0.5); /* Enhanced shadow and green border */
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1), 0 0 0 5px rgba(134, 239, 172, 0.5);
   width: 100%;
   max-width: 960px;
-  /* Removed fixed margin-y here, body flex properties will handle centering */
+  margin: auto; /* Vertically centers when space allows, pins to top when scrolling */
   transition: transform 0.3s ease;
   animation: fadeIn 0.8s ease;
 }

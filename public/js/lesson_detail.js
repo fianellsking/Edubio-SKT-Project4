@@ -76,8 +76,10 @@ function renderQuestions(questions, containerId, testType, showAnswers = false, 
 
     questions.forEach((q, index) => {
         const userAnswerObj = userAnswers[q.id]; // Get the stored answer object for this question
-        const isSelectedAndCorrect = userAnswerObj && userAnswerObj.selected === q.answer;
+        const isSelectedAndCorrect = userAnswerObj && userAnswerObj.correct;
         const selectedOptionText = userAnswerObj ? userAnswerObj.selected : 'ไม่ได้เลือก';
+        const correctAnswer = (userAnswerObj && userAnswerObj.correctAnswer) || q.answer || '';
+        const explanation = (userAnswerObj && userAnswerObj.explanation) || q.explanation || '';
         
         const questionHtml = `
             <div class="question-item" data-question-id="${q.id}">
@@ -88,7 +90,7 @@ function renderQuestions(questions, containerId, testType, showAnswers = false, 
                         let labelClass = '';
                         
                         if (showAnswers) {
-                            if (option === q.answer) {
+                            if (option === correctAnswer) {
                                 labelClass += ' correct-answer-highlight'; // Always highlight the correct answer
                             }
                             if (isSelected) {
@@ -110,7 +112,7 @@ function renderQuestions(questions, containerId, testType, showAnswers = false, 
                 </div>
                 <div class="question-explanation mt-4 p-3 rounded-md ${showAnswers ? (isSelectedAndCorrect ? 'bg-green-100' : 'bg-red-100') : ''}" 
                      style="display: ${showAnswers ? 'block' : 'none'};">
-                    <p><strong>${showAnswers ? (isSelectedAndCorrect ? `<span class="text-green-700">${selectedOptionText} ถูกต้อง!!!</span>` : `<span class="text-red-700">${selectedOptionText} ผิด!!!</span><br><span class="text-blue-700">คำตอบที่ถูกต้องคือ: ${q.answer}</span>`) : ''}</strong><br>คำอธิบาย: ${q.explanation}</p>
+                    <p><strong>${showAnswers ? (isSelectedAndCorrect ? `<span class="text-green-700">${selectedOptionText} ถูกต้อง!!!</span>` : `<span class="text-red-700">${selectedOptionText} ผิด!!!</span><br><span class="text-blue-700">คำตอบที่ถูกต้องคือ: ${correctAnswer}</span>`) : ''}</strong><br>คำอธิบาย: ${explanation}</p>
                 </div>
             </div>
         `;
@@ -119,9 +121,8 @@ function renderQuestions(questions, containerId, testType, showAnswers = false, 
 }
 
 
-// Function to check answers and calculate score
-function checkAnswers(questions, containerId, resultId, testType) { 
-    let score = 0;
+// Function to check answers securely via server API
+async function checkAnswers(questions, containerId, resultId, testType) { 
     const container = document.getElementById(containerId);
     const resultDisplay = document.getElementById(resultId);
     
@@ -130,8 +131,8 @@ function checkAnswers(questions, containerId, resultId, testType) {
         return { score: 0, answers: {} };
     }
 
-    const currentTestAnswers = {};
-    let allAnswered = true; // Flag to check if all questions have been answered
+    const userSelections = {};
+    let allAnswered = true;
 
     // First pass: Collect all selected answers and check if all questions are answered
     questions.forEach(q => {
@@ -142,20 +143,36 @@ function checkAnswers(questions, containerId, resultId, testType) {
         const selectedValue = selectedOption ? selectedOption.value : null;
 
         if (selectedValue === null) {
-            allAnswered = false; // Set flag to false if any question is not answered
+            allAnswered = false;
         }
-        
-        // Store selected value and initial correctness (will be fully determined in second pass)
-        currentTestAnswers[q.id] = { selected: selectedValue, correct: false };
+        userSelections[q.id] = selectedValue;
     });
 
     // If not all questions are answered, show message and stop
     if (!allAnswered) {
         showMessageBox("คำเตือน", "กรุณาตอบคำถามให้ครบทุกข้อก่อนส่ง");
-        return { score: -1, answers: {} }; // Return -1 to indicate incomplete
+        return { score: -1, answers: {} };
     }
 
-    // Second pass: Calculate score, update UI, and store final answers
+    // Call server API for verification
+    let score = 0;
+    let currentTestAnswers = {};
+    try {
+        const response = await fetch('/api/check-answers', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ lessonId: currentLessonId, testType, userSelections })
+        });
+        const data = await response.json();
+        score = data.score || 0;
+        currentTestAnswers = data.answers || {};
+    } catch (err) {
+        console.error("Server grading request failed:", err);
+        showMessageBox("ข้อผิดพลาด", "ไม่สามารถตรวจสอบคำตอบกับเซิร์ฟเวอร์ได้");
+        return { score: -1, answers: {} };
+    }
+
+    // Second pass: Update UI with explanation and correct choices from server response
     questions.forEach(q => {
         const questionItem = container.querySelector(`.question-item[data-question-id="${q.id}"]`);
         if (!questionItem) return;
@@ -164,43 +181,39 @@ function checkAnswers(questions, containerId, resultId, testType) {
         const explanationDiv = questionItem.querySelector('.question-explanation');
         const labels = questionItem.querySelectorAll('label');
 
-        // Clear previous highlight classes before re-applying
         labels.forEach(label => {
             label.classList.remove('selected-correct', 'selected-incorrect', 'correct-answer-highlight');
         });
 
-        const selectedValue = selectedOption ? selectedOption.value : null;
-        const isCorrect = selectedValue === q.answer; // Determine correctness for this question
+        const ansObj = currentTestAnswers[q.id] || {};
+        const isCorrect = ansObj.correct || false;
+        const correctAnswer = ansObj.correctAnswer || '';
+        const explanation = ansObj.explanation || '';
+        const selectedValue = ansObj.selected || null;
 
         if (isCorrect) {
-            score++;
             questionItem.classList.add('correct');
             if (selectedOption) selectedOption.parentElement.classList.add('selected-correct');
         } else {
             questionItem.classList.add('incorrect');
             if (selectedOption) selectedOption.parentElement.classList.add('selected-incorrect');
-            // Highlight the correct answer when an incorrect one is selected
-            const correctAnswerLabel = questionItem.querySelector(`input[value="${q.answer}"]`);
+            const correctAnswerLabel = questionItem.querySelector(`input[value="${correctAnswer}"]`);
             if (correctAnswerLabel) {
                 correctAnswerLabel.parentElement.classList.add('correct-answer-highlight');
             }
         }
 
-        // Update explanation text with status and display it
         let explanationHeader = '';
         if (isCorrect) {
             explanationHeader = `<span class="text-green-700">${selectedValue} ถูกต้อง!!!</span>`;
         } else {
-            explanationHeader = `<span class="text-red-700">${selectedValue || 'ไม่ได้เลือก'} ผิดพลาด!!!</span><br><span class="text-blue-700">คำตอบที่ถูกต้องคือ: ${q.answer}</span>`;
+            explanationHeader = `<span class="text-red-700">${selectedValue || 'ไม่ได้เลือก'} ผิดพลาด!!!</span><br><span class="text-blue-700">คำตอบที่ถูกต้องคือ: ${correctAnswer}</span>`;
         }
         if (explanationDiv) {
-            explanationDiv.innerHTML = `<p><strong>${explanationHeader}</strong><br>คำอธิบาย: ${q.explanation}</p>`;
-            explanationDiv.style.display = 'block'; // Show explanation
-            explanationDiv.style.backgroundColor = isCorrect ? '#d1fae5' : '#fee2e2'; // Set background color
+            explanationDiv.innerHTML = `<p><strong>${explanationHeader}</strong><br>คำอธิบาย: ${explanation}</p>`;
+            explanationDiv.style.display = 'block';
+            explanationDiv.style.backgroundColor = isCorrect ? '#d1fae5' : '#fee2e2';
         }
-        
-        // Update the correctness in currentTestAnswers for this question
-        currentTestAnswers[q.id].correct = isCorrect;
     });
 
     resultDisplay.textContent = `คุณทำถูก ${score} ข้อ จาก ${questions.length} ข้อ`;
@@ -340,7 +353,7 @@ async function loadSavedLessonState(lessonId) {
             }
 
         } else {
-
+            showSection('preTestSection');
             renderQuestions(window.currentLessonData.preTest, 'preTestQuestions', 'pre');
             document.getElementById('continueToContentBtn').classList.add('hidden'); // Hide continue button
             document.getElementById('submitPreTestBtn').disabled = false; // Ensure submit button is enabled
@@ -597,8 +610,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const returnToHomeFromSummaryBtn = document.getElementById('returnToHomeFromSummaryBtn');
 
 
-    if (!currentLessonId || !lessonsData[currentLessonId]) {
-        console.error("Lesson data lookup failed:", currentLessonId, lessonsData[currentLessonId]); // Debugging line
+    if (!currentLessonId || !window.lessonsData[currentLessonId]) {
+        console.error("Lesson data lookup failed:", currentLessonId, window.lessonsData[currentLessonId]); // Debugging line
         showMessageBox("ข้อผิดพลาด", "บทเรียนนี้ยังไม่ถูกเพิ่มเข้ามา โปรดรอการพัฒนา!", () => {
             window.location.href = "/html/home.html"; // Redirect back if lesson not found
         });
@@ -606,7 +619,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Assign to window.currentLessonData
-    window.currentLessonData = lessonsData[currentLessonId];
+    window.currentLessonData = window.lessonsData[currentLessonId];
     document.getElementById('lessonTitle').textContent = window.currentLessonData.title;
 
         const token = localStorage.getItem('token');
@@ -642,35 +655,40 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (submitPreTestBtn) {
         submitPreTestBtn.addEventListener('click', async () => {
-            if (!currentUserId) {
-                showMessageBox("เข้าสู่ระบบ", "กรุณาเข้าสู่ระบบก่อนทำแบบทดสอบ");
-                return;
-            }
             // Validate if all questions are answered for pre-test
-            const { score, answers } = checkAnswers(window.currentLessonData.preTest, 'preTestQuestions', 'preTestResult', 'pre');
+            const { score, answers } = await checkAnswers(window.currentLessonData.preTest, 'preTestQuestions', 'preTestResult', 'pre');
             if (score === -1) return; // If not all answered, stop here
 
             preTestScore = score;
-            userPreTestAnswers = answers; // Store answers for review
+            userPreTestAnswers = answers;
 
-            await saveScore(currentLessonId, 'pre', preTestScore, userPreTestAnswers); // Pass answers
+            if (currentUserId) {
+                await saveScore(currentLessonId, 'pre', preTestScore, userPreTestAnswers);
+            }
+
+            const resultDisplay = document.getElementById('preTestResult');
+            if (resultDisplay) {
+                resultDisplay.textContent = `คะแนนก่อนเรียนของคุณ: ${preTestScore} / ${window.currentLessonData.preTest.length}`;
+                resultDisplay.classList.remove('hidden');
+            }
+
+            if (continueToContentBtn) continueToContentBtn.classList.remove('hidden');
+
             showMessageBox("ผลคะแนนก่อนเรียน", `คุณทำได้ ${preTestScore} คะแนน`, () => {
-                // After closing message box, show kingdom selection for taxonomy, otherwise show general content
+                // After closing message box, advance to lesson content
                 if (currentLessonId === 'taxonomy') {
-                    showSection('taxonomyIntroSection'); // Go to general intro first for taxonomy
+                    showSection('taxonomyIntroSection');
                     document.getElementById('generalIntroTitle').textContent = "ภาพรวมการจำแนกสิ่งมีชีวิต";
                     document.getElementById('generalIntroContent').innerHTML = window.currentLessonData.content.introductionText;
-                    renderGeneralTaxonomyVideos(); // Render general videos for taxonomy intro
+                    renderGeneralTaxonomyVideos();
                     renderGeneralTaxonomySlides();
                     setupGeneralSlidesToggle();
                 } else {
                     showSection('contentSection');
-                    // For non-taxonomy lessons, this means just showing their single content block
-                    renderLessonContent(); 
+                    renderLessonContent();
                 }
-                if (submitPreTestBtn) submitPreTestBtn.disabled = true; // Disable submit button
             });
-            
+            if (submitPreTestBtn) submitPreTestBtn.disabled = true;
         });
     }
 
@@ -746,22 +764,27 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (submitPostTestBtn) {
         submitPostTestBtn.addEventListener('click', async () => {
-            if (!currentUserId) {
-                showMessageBox("เข้าสู่ระบบ", "กรุณาเข้าสู่ระบบก่อนทำแบบทดสอบ");
-                return;
-            }
             // Validate if all questions are answered for post-test
-            const { score, answers } = checkAnswers(window.currentLessonData.postTest, 'postTestQuestions', 'postTestResult', 'post');
+            const { score, answers } = await checkAnswers(window.currentLessonData.postTest, 'postTestQuestions', 'postTestResult', 'post');
             if (score === -1) return; // If not all answered, stop here
 
             postTestScore = score;
-            userPostTestAnswers = answers; // Store answers for review
-            
-            await saveScore(currentLessonId, 'post', postTestScore, userPostTestAnswers); // Pass answers
+            userPostTestAnswers = answers;
+
+            if (currentUserId) {
+                await saveScore(currentLessonId, 'post', postTestScore, userPostTestAnswers);
+            }
+
+            const resultDisplay = document.getElementById('postTestResult');
+            if (resultDisplay) {
+                resultDisplay.textContent = `คะแนนหลังเรียนของคุณ: ${postTestScore} / ${window.currentLessonData.postTest.length}`;
+                resultDisplay.classList.remove('hidden');
+            }
+
             showMessageBox("ผลคะแนนหลังเรียน", `คุณทำได้ ${postTestScore} คะแนน`, () => {
-                if (viewScoresBtn) viewScoresBtn.classList.remove('hidden'); // Ensure button is visible after message
+                if (viewScoresBtn) viewScoresBtn.classList.remove('hidden');
             });
-            if (submitPostTestBtn) submitPostTestBtn.disabled = true; // Disable submit button
+            if (submitPostTestBtn) submitPostTestBtn.disabled = true;
         });
     }
 

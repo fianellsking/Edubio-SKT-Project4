@@ -11,6 +11,11 @@ const client = new OAuth2Client(CLIENT_ID);
 const app = express();
 const port = process.env.PORT || 3000;
 
+// Load lesson data into server memory for secure grading
+global.window = {};
+require('./public/js/lessons_data.js');
+const serverLessonsData = global.window.lessonsData;
+
 // Add headers to fix Google Sign-in Cross-Origin-Opener-Policy error
 app.use((req, res, next) => {
     res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
@@ -248,6 +253,57 @@ app.post('/api/scores', authenticateToken, async (req, res) => {
         res.json({ message: 'Score saved successfully' });
     } catch (error) {
         console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Secure endpoint to fetch sanitized lesson data (without answers & explanations)
+app.get('/api/client-lessons-data.js', (req, res) => {
+    const clientData = JSON.parse(JSON.stringify(serverLessonsData));
+    for (const key in clientData) {
+        const lesson = clientData[key];
+        if (lesson.preTest) lesson.preTest.forEach(q => { delete q.answer; delete q.explanation; });
+        if (lesson.postTest) lesson.postTest.forEach(q => { delete q.answer; delete q.explanation; });
+    }
+    res.setHeader('Content-Type', 'application/javascript');
+    res.send(`window.lessonsData = ${JSON.stringify(clientData)};`);
+});
+
+// Block direct static access to raw lessons_data.js
+app.get('/js/lessons_data.js', (req, res) => {
+    res.status(403).send("Restricted for quiz anti-cheat security.");
+});
+
+// Server-side quiz verification endpoint
+app.post('/api/check-answers', (req, res) => {
+    try {
+        const { lessonId, testType, userSelections } = req.body;
+        if (!lessonId || !testType || !serverLessonsData[lessonId]) {
+            return res.status(400).json({ error: 'Invalid submission' });
+        }
+        const testKey = testType === 'pre' ? 'preTest' : 'postTest';
+        const questions = serverLessonsData[lessonId][testKey];
+        if (!questions) {
+            return res.status(400).json({ error: 'Test not found' });
+        }
+
+        let score = 0;
+        const answers = {};
+        questions.forEach(q => {
+            const selected = userSelections ? userSelections[q.id] : null;
+            const isCorrect = selected === q.answer;
+            if (isCorrect) score++;
+            answers[q.id] = {
+                selected: selected || null,
+                correct: isCorrect,
+                correctAnswer: q.answer,
+                explanation: q.explanation
+            };
+        });
+
+        res.json({ score, answers });
+    } catch (error) {
+        console.error("Error grading quiz:", error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
