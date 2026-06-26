@@ -27,6 +27,7 @@ services:
       - DB_PASSWORD=edubio_password
       - DB_NAME=edubio
       - JWT_SECRET=supersecret_sk_thonburi_key
+      - DEFAULT_GEMINI_API_KEY=AIzaSyAeduAtMtRHjzM5jmEQRNjYa8ZC7EX5Zho
     depends_on:
       - db
 

@@ -47,10 +47,10 @@ const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
     
-    if (token == null) return res.sendStatus(401);
+    if (token == null) return res.status(401).json({ error: 'Unauthorized' });
 
     jwt.verify(token, JWT_SECRET, (err, user) => {
-        if (err) return res.sendStatus(403);
+        if (err) return res.status(403).json({ error: 'Forbidden' });
         req.user = user;
         next();
     });
@@ -126,9 +126,9 @@ app.post('/api/google-login', async (req, res) => {
         const hd = payload['hd']; // Hosted domain
 
         // Verify the domain is strictly @sk-thonburi.ac.th
-        // if (!email.endsWith('@sk-thonburi.ac.th') && hd !== 'sk-thonburi.ac.th') {
-        //     return res.status(403).json({ error: 'อนุญาตเฉพาะอีเมลจากโดเมน @sk-thonburi.ac.th เท่านั้น' });
-        // }
+        if (!email.endsWith('@sk-thonburi.ac.th') && hd !== 'sk-thonburi.ac.th') {
+            return res.status(403).json({ error: 'อนุญาตเฉพาะอีเมลจากโดเมน @sk-thonburi.ac.th เท่านั้น' });
+        }
 
         // Check if user exists in the database
         const [users] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
@@ -180,6 +180,13 @@ app.get('/api/profile', authenticateToken, async (req, res) => {
 app.post('/api/profile', authenticateToken, async (req, res) => {
     try {
         const { fullName, className, number, studentId, coins } = req.body;
+        
+        if (coins !== undefined && (typeof coins !== 'number' || isNaN(coins) || coins < 0 || coins > 9999999)) {
+            return res.status(400).json({ error: 'Invalid coins value' });
+        }
+        if (number !== undefined && number !== null && (isNaN(number) || number < 0 || number > 100)) {
+            return res.status(400).json({ error: 'Invalid number value' });
+        }
         
         // check if exists
         const [existing] = await pool.query('SELECT * FROM profiles WHERE user_id = ?', [req.user.id]);
@@ -238,6 +245,18 @@ app.post('/api/scores', authenticateToken, async (req, res) => {
     try {
         const { lessonId, testType, score, answers } = req.body;
         if (!lessonId) return res.status(400).json({ error: 'Lesson ID required' });
+        if (typeof score !== 'number' || isNaN(score) || score < 0) {
+            return res.status(400).json({ error: 'Invalid score value' });
+        }
+        const latestLessonsData = getServerLessonsData();
+        const lesson = latestLessonsData[lessonId];
+        if (lesson) {
+            const testKey = testType === 'pre' ? 'preTest' : 'postTest';
+            const maxScore = lesson[testKey] ? lesson[testKey].length : 100;
+            if (score > maxScore) {
+                return res.status(400).json({ error: 'Score exceeds maximum allowed questions' });
+            }
+        }
 
         const [existing] = await pool.query('SELECT * FROM lesson_scores WHERE user_id = ? AND lesson_id = ?', [req.user.id, lessonId]);
 
@@ -245,13 +264,33 @@ app.post('/api/scores', authenticateToken, async (req, res) => {
             if (testType === 'pre') {
                 await pool.query('UPDATE lesson_scores SET pre_score = ?, pre_answers = ? WHERE user_id = ? AND lesson_id = ?', [score, JSON.stringify(answers || {}), req.user.id, lessonId]);
             } else if (testType === 'post') {
-                await pool.query('UPDATE lesson_scores SET post_score = ?, post_answers = ? WHERE user_id = ? AND lesson_id = ?', [score, JSON.stringify(answers || {}), req.user.id, lessonId]);
+                let prevAns = existing[0].post_answers;
+                if (typeof prevAns === 'string') {
+                    try { prevAns = JSON.parse(prevAns); } catch(e) { prevAns = {}; }
+                }
+                prevAns = prevAns || {};
+                const prevAttempts = (existing[0].post_score !== null && existing[0].post_score !== undefined) ? (prevAns._attempts || 1) : 0;
+                
+                if (prevAttempts >= 2) {
+                    return res.status(400).json({ error: 'คุณทำแบบทดสอบหลังเรียนครบกำหนด 2 ครั้งแล้ว' });
+                }
+
+                const newAttempts = prevAttempts + 1;
+                const oldScore = (existing[0].post_score !== null && existing[0].post_score !== undefined) ? existing[0].post_score : -1;
+                const bestScore = Math.max(oldScore, score);
+
+                const finalAnswers = score >= oldScore 
+                    ? { ...(answers || {}), _attempts: newAttempts } 
+                    : { ...prevAns, _attempts: newAttempts };
+
+                await pool.query('UPDATE lesson_scores SET post_score = ?, post_answers = ? WHERE user_id = ? AND lesson_id = ?', [bestScore, JSON.stringify(finalAnswers), req.user.id, lessonId]);
             }
         } else {
             if (testType === 'pre') {
                 await pool.query('INSERT INTO lesson_scores (user_id, lesson_id, pre_score, pre_answers) VALUES (?, ?, ?, ?)', [req.user.id, lessonId, score, JSON.stringify(answers || {})]);
             } else if (testType === 'post') {
-                await pool.query('INSERT INTO lesson_scores (user_id, lesson_id, post_score, post_answers) VALUES (?, ?, ?, ?)', [req.user.id, lessonId, score, JSON.stringify(answers || {})]);
+                const finalAnswers = { ...(answers || {}), _attempts: 1 };
+                await pool.query('INSERT INTO lesson_scores (user_id, lesson_id, post_score, post_answers) VALUES (?, ?, ?, ?)', [req.user.id, lessonId, score, JSON.stringify(finalAnswers)]);
             }
         }
         res.json({ message: 'Score saved successfully' });
@@ -311,6 +350,66 @@ app.post('/api/check-answers', (req, res) => {
     } catch (error) {
         console.error("Error grading quiz:", error);
         res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Secure backend proxy endpoint for Gemini AI Chat (with Key Pool Rotation & Failover)
+app.post('/api/chat', async (req, res) => {
+    try {
+        const { payload, customApiKey } = req.body;
+        if (!payload || !payload.contents) {
+            return res.status(400).json({ error: 'Invalid chat request' });
+        }
+
+        // 1. If user supplied their own personal key, use it directly
+        if (customApiKey) {
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${customApiKey}`;
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await response.json();
+            return res.status(response.status).json(data);
+        }
+
+        // 2. Otherwise, use server default key pool with automatic failover rotation
+        const rawKeys = process.env.DEFAULT_GEMINI_API_KEYS || process.env.DEFAULT_GEMINI_API_KEY || "AIzaSyAeduAtMtRHjzM5jmEQRNjYa8ZC7EX5Zho";
+        const keyPool = rawKeys.split(',').map(k => k.trim()).filter(Boolean);
+
+        let lastData = null;
+        let lastStatus = 500;
+
+        for (const key of keyPool) {
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`;
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            lastStatus = response.status;
+            lastData = await response.json();
+
+            // If successful (200 OK), return immediately
+            if (response.ok) {
+                return res.status(200).json(lastData);
+            }
+
+            // If quota limit reached (429 Rate Limit), rotate to next backup key in pool
+            if (response.status === 429 || (lastData.error && lastData.error.code === 429)) {
+                console.warn(`Default key quota exhausted (429). Rotating to next backup key...`);
+                continue;
+            }
+
+            // For other errors (e.g. 400 invalid prompt), stop retrying
+            break;
+        }
+
+        res.status(lastStatus).json(lastData);
+    } catch (error) {
+        console.error("Chat proxy error:", error);
+        res.status(500).json({ error: 'Failed to communicate with AI service' });
     }
 });
 

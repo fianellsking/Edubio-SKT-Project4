@@ -1,4 +1,4 @@
-/* ✅ Updated home.css: Enhanced background with animated gradient and subtle taxonomy-themed patterns (flowers, animals). */
+/* ✅ Updated home.css: Enhanced Physics Cosmic Blue & Quantum Indigo Theme */
 
 html {
   overflow-y: auto !important;
@@ -7,21 +7,22 @@ html {
 
 /* General body styles */
 body {
-  font-family: 'Noto Sans Thai', sans-serif; /* Set main font for Thai */
+  font-family: 'Noto Sans Thai', 'Inter', sans-serif;
   margin: 0;
   display: flex;
-  flex-direction: column; /* Stack children vertically */
-  justify-content: flex-start; /* Ensure top nav bar is never cut off */
-  align-items: center;   /* Center items horizontally */
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   min-height: 100vh;
   padding: 2rem 1rem;
-  background-image: url("https://i.postimg.cc/fLWbKkm8/green-leaf-background-illustration-free-vector-1.jpg");
+  background: radial-gradient(circle at 15% 50%, #1e1b4b 0%, #0b0f19 60%, #030712 100%);
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
   position: relative;
-  overflow-y: auto !important; /* Enable vertical scrolling */
+  overflow-y: auto !important;
   overflow-x: hidden;
+  color: #1e293b;
 }
 
 @keyframes gradientShift {
@@ -30,47 +31,42 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-@keyframes taxonomyPatternMove {
-    0% { background-position: 0 0, 60px 60px, 30px 30px, 0% 0%; }
-    100% { background-position: 120px 120px, 0 0, 60px 60px, 100% 100%; }
-}
-
-/* Floating decorative shapes (soft biology elements) */
+/* Floating decorative shapes (Quantum Glowing Orbs) */
 .decorative-shape {
     position: absolute;
-    background-color: rgba(144, 238, 144, 0.1);
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, rgba(99, 102, 241, 0) 70%);
     border-radius: 50%;
-    filter: blur(8px);
+    filter: blur(12px);
     opacity: 0;
-    animation: floatAndFade 20s infinite ease-in-out;
+    animation: floatAndFade 15s infinite ease-in-out;
     z-index: 0;
 }
 
-.shape-1 { width: 100px; height: 100px; top: 10%; left: 5%; animation-delay: 0s; }
-.shape-2 { width: 70px; height: 70px; bottom: 15%; right: 10%; animation-delay: 3s; }
-.shape-3 { width: 120px; height: 120px; top: 30%; right: 5%; animation-delay: 6s; }
-.shape-4 { width: 90px; height: 90px; bottom: 5%; left: 20%; animation-delay: 9s; }
-.shape-5 { width: 80px; height: 80px; top: 50%; left: 2%; animation-delay: 12s; }
-.shape-6 { width: 110px; height: 110px; bottom: 25%; left: 40%; animation-delay: 15s; }
+.shape-1 { width: 140px; height: 140px; top: 10%; left: 5%; animation-delay: 0s; }
+.shape-2 { width: 100px; height: 100px; bottom: 15%; right: 10%; animation-delay: 3s; }
+.shape-3 { width: 180px; height: 180px; top: 30%; right: 5%; animation-delay: 6s; }
+.shape-4 { width: 120px; height: 120px; bottom: 5%; left: 20%; animation-delay: 9s; }
 
 @keyframes floatAndFade {
-    0% { transform: translateY(0) scale(0.7); opacity: 0; }
-    20% { opacity: 0.15; }
-    80% { opacity: 0.15; }
-    100% { transform: translateY(-50px) scale(1.1); opacity: 0; }
+    0% { transform: translateY(0) scale(0.8); opacity: 0; }
+    20% { opacity: 0.4; }
+    80% { opacity: 0.4; }
+    100% { transform: translateY(-60px) scale(1.2); opacity: 0; }
 }
 
 .container {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(8px);
-  border-radius: 1.5rem;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 1.75rem;
   padding: 2.5rem;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1), 0 0 0 5px rgba(134, 239, 172, 0.5);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35), 0 0 0 4px rgba(99, 102, 241, 0.2);
   width: 100%;
   max-width: 960px;
-  margin: auto; /* Vertically centers when space allows, pins to top when scrolling */
+  margin: auto;
   transition: transform 0.3s ease;
   animation: fadeIn 0.8s ease;
+  border: 1px solid rgba(147, 197, 253, 0.4);
 }
 
 @keyframes fadeIn {
@@ -79,14 +75,14 @@ body {
 }
 
 .lesson-card {
-  background-color: #f0fdf4;
-  border: 2px solid #bbf7d0;
-  border-radius: 1.25rem;
-  padding: 1.5rem;
+  background: linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%);
+  border: 2px solid #bfdbfe;
+  border-radius: 1.5rem;
+  padding: 2rem;
   text-align: center;
   cursor: pointer;
-  transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease; /* Added box-shadow transition */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -95,88 +91,99 @@ body {
 }
 
 .lesson-card:hover {
-  background-color: #d9f99d;
-  transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15), 0 0 0 4px rgba(67, 160, 71, 0.3); /* Add green ring on hover */
+  background: linear-gradient(135deg, #dbeafe 0%, #c7d2fe 100%);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 15px 30px rgba(59, 130, 246, 0.2), 0 0 0 4px rgba(99, 102, 241, 0.3);
+  border-color: #818cf8;
 }
 
 .lesson-card-icon {
-  font-size: 3rem;
+  font-size: 3.5rem;
   margin-bottom: 1rem;
-  color: #22c55e;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .lesson-card:hover .lesson-card-icon {
-  transform: scale(1.2) rotate(5deg);
+  transform: scale(1.25) rotate(8deg);
 }
 
 .lesson-card h3 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #166534;
-  margin-bottom: 0.5rem;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #1e3a8a;
+  margin-bottom: 0.75rem;
 }
 
 .lesson-card p {
-  font-size: 1rem;
-  color: #15803d;
+  font-size: 1.05rem;
+  color: #334155;
   line-height: 1.6;
 }
 
 /* General Button Styles */
 button {
-  font-family: 'Noto Sans Thai', sans-serif;
+  font-family: 'Noto Sans Thai', 'Inter', sans-serif;
   font-size: 1rem;
-  font-weight: 600;
-  padding: 0.75rem 1.25rem;
-  border-radius: 9999px; /* Fully rounded pills */
-  transition: all 0.3s ease;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  border: none;
 }
 
 button:hover {
   transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 15px rgba(59, 130, 246, 0.25);
 }
 
-/* Specific Button Colors (from Tailwind, adjusted for consistency) */
-.bg-emerald-500 { background-color: #10B981; } /* For Profile button */
-.hover\:bg-emerald-600:hover { background-color: #059669; }
+/* Specific Foolproof Button Styles */
+#viewProfileBtn { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important; color: #ffffff !important; }
+#viewProfileBtn:hover { background: linear-gradient(135deg, #2563eb 0%, #1e3a8a 100%) !important; }
 
-.bg-red-500 { background-color: #EF4444; } /* For Logout button */
-.hover\:bg-red-600:hover { background-color: #DC2626; }
+#editProfileBtn { background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%) !important; color: #ffffff !important; }
+#editProfileBtn:hover { background: linear-gradient(135deg, #4f46e5 0%, #312e81 100%) !important; }
 
-.bg-green-600 { background-color: #16A34A; } /* For Save button (profile modal) */
-.hover\:bg-green-700:hover { background-color: #14532D; }
+#logoutBtn { background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%) !important; color: #ffffff !important; }
+#logoutBtn:hover { background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%) !important; }
 
-.bg-gray-400 { background-color: #9CA3AF; } /* For Close/Cancel buttons */
-.hover\:bg-gray-500:hover { background-color: #6B7280; }
+#dailyQuizBtn { background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%) !important; color: #020617 !important; }
+#dailyQuizBtn:hover { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important; }
 
-.bg-blue-500 { background-color: #3B82F6; } /* For View Profile button */
-.hover\:bg-blue-600:hover { background-color: #2563EB; }
+#saveProfileBtn { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; color: #ffffff !important; }
+#saveProfileBtn:hover { background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%) !important; }
 
+#closeProfileModalBtn, #closeDisplayProfileModalBtn { background: #64748b !important; color: #ffffff !important; }
+#closeProfileModalBtn:hover, #closeDisplayProfileModalBtn:hover { background: #475569 !important; }
+
+#messageBoxCloseBtn, #submitQuizAnswerBtn, #nextQuizBtn, #closeResultModalBtn { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; color: #ffffff !important; }
+#messageBoxCloseBtn:hover, #submitQuizAnswerBtn:hover, #nextQuizBtn:hover, #closeResultModalBtn:hover { background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%) !important; }
+
+#closeQuizModalBtn { background: transparent !important; color: #64748b !important; box-shadow: none !important; }
+#closeQuizModalBtn:hover { color: #334155 !important; transform: none !important; }
 
 /* Header Styling */
 h1.text-4xl {
-  color: #047857; /* Darker green for main title */
-  text-shadow: 2px 2px 3px rgba(0,0,0,0.1);
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 900;
+}
+
+h1.text-4xl span {
+  -webkit-text-fill-color: initial !important;
 }
 
 h2.text-3xl {
-  color: #1a202c;
+  color: #1e3a8a;
   margin-bottom: 2rem;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 /* Modal Styling */
-/* Ensure these classes have 'display: none;' by default */
-.modal,
-.message-box,
-.profile-modal,
-.display-profile-modal {
-  display: none; /* This is the key change to hide them initially */
+.modal, .message-box, .profile-modal, .display-profile-modal {
+  display: none;
   position: fixed;
   z-index: 1000;
   left: 0;
@@ -184,194 +191,67 @@ h2.text-3xl {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0,0,0,0.6);
-  /* Use flexbox to center modal content */
-  align-items: center;   /* Center vertically */
-  justify-content: center; /* Center horizontally */
+  background-color: rgba(3, 7, 18, 0.75);
+  backdrop-filter: blur(4px);
+  align-items: center;
+  justify-content: center;
 }
 
-/* When a modal is active (shown by JS), set display to flex */
-.modal.active,
-.message-box.active,
-.profile-modal.active,
-.display-profile-modal.active {
+.modal.active, .message-box.active, .profile-modal.active, .display-profile-modal.active {
     display: flex;
 }
 
-
 .modal-content, .profile-modal-content, .message-box-content, .display-profile-modal-content {
   background: #ffffff;
-  border-radius: 1rem;
-  padding: 1.5rem; /* Reduced padding for smaller look */
-  width: 90%; /* Responsive width */
-  max-width: 400px; /* Reduced max-width for modals, was 480px */
-  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+  border-radius: 1.5rem;
+  padding: 2.5rem;
+  width: 90%;
+  max-width: 440px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
   text-align: center;
   position: relative;
-  border: 2px solid #4CAF50; /* Green border for modals */
+  border: 3px solid #6366f1; /* Quantum Indigo Border */
   animation: modalPopIn 0.3s ease-out forwards;
 }
 
 @keyframes modalPopIn {
-    from { transform: scale(0.9); opacity: 0; }
+    from { transform: scale(0.92); opacity: 0; }
     to { transform: scale(1); opacity: 1; }
 }
-/* ให้แน่ใจว่าแชทไม่ลอยตรงกลาง */
-#chatModal {
-  position: fixed;
-  inset: 0;
-  z-index: 1001;
-}
 
+#chatModal { position: fixed; inset: 0; z-index: 1001; }
 #chatModal > div {
-  position: absolute;
-  right: 1.5rem;
-  bottom: 6rem;
-  max-height: 600px;
-  height: 75%;
-  width: 90%;
-  max-width: 400px;
-  background: white;
-  border-radius: 1rem;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  position: absolute; right: 1.5rem; bottom: 6rem;
+  max-height: 600px; height: 75%; width: 90%; max-width: 400px;
+  background: white; border-radius: 1.25rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4); border: 2px solid #3b82f6;
   overflow: hidden;
 }
 
-
-
-/* Specific styling for input fields within modals */
 .modal-content input, .profile-modal-content input, .display-profile-modal-content input {
     margin-bottom: 1rem; 
 }
 
-/* Scrollbar styling for lessonScoresDisplay */
-#lessonScoresDisplay {
-    scrollbar-width: thin; /* Firefox */
-    scrollbar-color: #4CAF50 #f1f1f1; /* thumb and track color */
-}
-
-#lessonScoresDisplay::-webkit-scrollbar {
-    width: 8px; /* width of the scrollbar */
-}
-
-#lessonScoresDisplay::-webkit-scrollbar-track {
-    background: #f1f1f1; /* color of the track */
-    border-radius: 10px;
-}
-
-#lessonScoresDisplay::-webkit-scrollbar-thumb {
-    background: #4CAF50; /* color of the scroll thumb */
-    border-radius: 10px;
-}
-
-#lessonScoresDisplay::-webkit-scrollbar-thumb:hover {
-    background: #388E3C; /* color of the scroll thumb on hover */
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .container {
-    padding: 1.5rem;
-    /* On mobile, allow margin-top and margin-bottom for spacing, but still centered */
-    margin-top: 1rem; 
-    margin-bottom: 1rem;
-  }
-  .flex-wrap { flex-wrap: wrap; } /* Wrap buttons on small screens */
-  .space-x-2 > *:not(:first-child) { margin-left: 0.5rem; }
-  .space-x-4 > *:not(:first-child) { margin-left: 1rem; }
-  .justify-end { justify-content: center; } /* Center buttons on small screens */
-  .md\:mb-0 { margin-bottom: 0.5rem; }
-  .text-xl { font-size: 1.125rem; } /* Smaller font for greeting */
-  .text-base { font-size: 0.9rem; }
-  .text-sm { font-size: 0.8rem; }
-
-  .lesson-card-icon {
-    font-size: 2.5rem;
-  }
-  .lesson-card h3 {
-    font-size: 1.25rem;
-  }
-  .lesson-card p {
-    font-size: 0.9rem;
-  }
-  /* Ensure lesson cards stack nicely on small screens */
-  .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); } 
-  .md\:grid-cols-2 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
-  .lg\:grid-cols-3 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
-
-  /* Hide complex background patterns on smaller mobile screens for performance and clarity */
-  body {
-    background: 
-      linear-gradient(135deg, #a8e063 0%, #56ab2f 100%); /* Simpler gradient for mobile */
-    background-size: 100% 100%; /* No animation for background size */
-    animation: none; /* No animation */
-  }
-  .decorative-shape { display: none; } /* Hide decorative shapes */
-
-  /* Further adjust modal for very small screens if needed */
-  .modal-content, .profile-modal-content, .message-box-content, .display-profile-modal-content {
-    padding: 1rem; /* Even smaller padding */
-    max-width: 95%; /* Allow it to take more width on very small screens */
-  }
-}
-
-#quizModal {
-  animation: fadeIn 0.3s ease-in-out;
-}
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
-}
+#lessonScoresDisplay { scrollbar-width: thin; scrollbar-color: #3b82f6 #f1f1f1; }
+#lessonScoresDisplay::-webkit-scrollbar { width: 8px; }
+#lessonScoresDisplay::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+#lessonScoresDisplay::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
+#lessonScoresDisplay::-webkit-scrollbar-thumb:hover { background: #2563eb; }
 
 .coin-display {
-  background-color: #fef9c3;
-  border: 2px solid #facc15;
-  padding: 0.5rem 1rem;
-  border-radius: 1rem;
-  color: #92400e;
-  font-weight: bold;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 1rem;
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  margin-top: 0.5rem; /* ✅ ตรงนี้ช่วยเว้นด้านบน */
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border: 2px solid #f59e0b;
+    padding: 6px 16px;
+    border-radius: 9999px;
+    font-weight: bold;
+    color: #92400e;
+    box-shadow: 0 2px 4px rgba(245, 158, 11, 0.2);
 }
 
-.coin-display img {
-  width: 24px;
-  height: 24px;
-}
-/* ✅ ป๊อปอัป Quiz */
-.quiz-popup {
-  background-color: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(2px);
-  z-index: 50;
-}
-
-.leaf1 {
-  position: absolute;
-  top: 140px;
-  left: 40%;
-  transform: translateX(-50%);
-  width: 200px;
-  max-width: 90%;
-  z-index: 1;
-  pointer-events: none;
-  scale: 3.5;
-  opacity: 0.9;
-}
-
-.leaf2 {
-  position: absolute;
-  bottom: 10px;
-  right: -45%;
-  transform: translateX(-50%);
-  width: 200px;
-  max-width: 90%;
-  z-index: 1;
-  pointer-events: none;
-  scale: 3;
-  opacity: 0.9;
+@media (max-width: 768px) {
+  .container { padding: 1.5rem; margin-top: 1rem; margin-bottom: 1rem; }
+  .flex-wrap { flex-wrap: wrap; }
+  .justify-end { justify-content: center; }
+  body { background: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #030712 100%); }
+  .decorative-shape { display: none; }
 }

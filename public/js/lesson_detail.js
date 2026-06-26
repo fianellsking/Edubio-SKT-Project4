@@ -82,9 +82,10 @@ function renderQuestions(questions, containerId, testType, showAnswers = false, 
         const explanation = (userAnswerObj && userAnswerObj.explanation) || q.explanation || '';
         
         const questionHtml = `
-            <div class="question-item" data-question-id="${q.id}">
-                <p>${index + 1}. ${q.question}</p>
-                <div class="options-group">
+            <div class="question-item mb-6 p-4 bg-slate-50/50 rounded-xl border border-slate-200" data-question-id="${q.id}">
+                <p class="text-lg font-bold text-slate-800 mb-3">${index + 1}. ${q.question}</p>
+                ${q.image ? `<div class="my-4 flex justify-center"><img src="${q.image}" alt="รูปประกอบโจทย์ข้อ ${index + 1}" class="max-h-64 rounded-xl shadow-md border border-slate-300 bg-white p-2"></div>` : ''}
+                <div class="options-group space-y-2.5">
                     ${q.options.map((option) => {
                         const isSelected = userAnswerObj && userAnswerObj.selected === option;
                         let labelClass = '';
@@ -269,6 +270,12 @@ async function loadLesson(lessonId) {
     if (currentUserId) { 
         try {
             const response = await fetch('/api/profile', { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } });
+            if (response.status === 401 || response.status === 403) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = '/html/index.html';
+                return;
+            }
             const userProfileSnap = await response.json();
             if (Object.keys(userProfileSnap).length > 0) {
                 currentUserProfile = userProfileSnap;
@@ -308,14 +315,39 @@ async function loadSavedLessonState(lessonId) {
 
     try {
         const response = await fetch('/api/scores', { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } });
+        if (response.status === 401 || response.status === 403) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/html/index.html';
+            return;
+        }
         const scores = await response.json();
         const savedData = scores.find(s => s.lesson_id === lessonId);
         
         if (savedData) {
 
 
+            // Check if saved answers match current test questions
+            let isPreValid = false;
+            if (savedData.pre_answers && Object.keys(savedData.pre_answers).length > 0) {
+                const firstQ = window.currentLessonData.preTest?.[0];
+                const storedAns = firstQ ? savedData.pre_answers[firstQ.id] : null;
+                if (storedAns && storedAns.selected && firstQ.options.includes(storedAns.selected)) {
+                    isPreValid = true;
+                }
+            }
+
+            let isPostValid = false;
+            if (savedData.post_answers && Object.keys(savedData.post_answers).length > 0) {
+                const firstPostQ = window.currentLessonData.postTest?.[0];
+                const storedPostAns = firstPostQ ? savedData.post_answers[firstPostQ.id] : null;
+                if (storedPostAns && storedPostAns.selected && firstPostQ.options.includes(storedPostAns.selected)) {
+                    isPostValid = true;
+                }
+            }
+
             // Load pre-test state
-            if (savedData.pre_answers) {
+            if (isPreValid) {
                 userPreTestAnswers = savedData.pre_answers;
                 preTestScore = savedData.pre_score || 0; // Ensure score is loaded too
 
@@ -339,7 +371,7 @@ async function loadSavedLessonState(lessonId) {
             }
 
             // Load post-test state (to enable "View Scores" if completed)
-            if (savedData.post_answers) {
+            if (isPostValid) {
                 userPostTestAnswers = savedData.post_answers;
                 postTestScore = savedData.post_score || 0;
                 // If post-test was completed, show view scores button
@@ -572,15 +604,42 @@ async function displayScoreSummary() {
     }
     try {
         const response = await fetch('/api/scores', { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } });
+        if (response.status === 401 || response.status === 403) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/html/index.html';
+            return;
+        }
         const scores = await response.json();
         const lessonScore = scores.find(s => s.lesson_id === currentLessonId);
 
         if (lessonScore) {
             document.getElementById('preScoreSummary').textContent = `${lessonScore.pre_score !== null ? lessonScore.pre_score : 0} คะแนน`;
             document.getElementById('postScoreSummary').textContent = `${lessonScore.post_score !== null ? lessonScore.post_score : 0} คะแนน`;
+            
+            let postAns = lessonScore.post_answers;
+            if (typeof postAns === 'string') {
+                try { postAns = JSON.parse(postAns); } catch(e) { postAns = {}; }
+            }
+            const attempts = (lessonScore.post_score !== null && lessonScore.post_score !== undefined) ? (postAns?._attempts || 1) : 0;
+            const attemptsEl = document.getElementById('postAttemptsSummary');
+            if (attemptsEl) {
+                attemptsEl.textContent = attempts > 0 ? `ทำไปแล้ว ${attempts} / 2 ครั้ง` : '';
+            }
+
+            const retryBtn = document.getElementById('retryPostTestBtn');
+            if (retryBtn) {
+                if (attempts > 0 && attempts < 2) {
+                    retryBtn.classList.remove('hidden');
+                } else {
+                    retryBtn.classList.add('hidden');
+                }
+            }
         } else {
             document.getElementById('preScoreSummary').textContent = 'ยังไม่มีคะแนน';
             document.getElementById('postScoreSummary').textContent = 'ยังไม่มีคะแนน';
+            const retryBtn = document.getElementById('retryPostTestBtn');
+            if (retryBtn) retryBtn.classList.add('hidden');
         }
     } catch (error) {
         console.error("ข้อผิดพลาดในการดึงข้อมูลสรุปคะแนน:", error.message);
@@ -795,6 +854,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (returnToHomeFromSummaryBtn) {
         returnToHomeFromSummaryBtn.addEventListener('click', () => {
             window.location.href = "/html/home.html";
+        });
+    }
+
+    const retryPostTestBtn = document.getElementById('retryPostTestBtn');
+    if (retryPostTestBtn) {
+        retryPostTestBtn.addEventListener('click', () => {
+            userPostTestAnswers = {};
+            postTestScore = 0;
+            showSection('postTestSection');
+            renderQuestions(window.currentLessonData.postTest, 'postTestQuestions', 'post');
+            if (submitPostTestBtn) submitPostTestBtn.disabled = false;
+            const resEl = document.getElementById('postTestResult');
+            if (resEl) resEl.classList.add('hidden');
         });
     }
 });

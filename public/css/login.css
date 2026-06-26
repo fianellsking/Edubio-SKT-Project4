@@ -1,32 +1,33 @@
 body {
-    font-family: 'Noto Sans Thai', sans-serif;
+    font-family: 'Noto Sans Thai', 'Inter', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     margin: 0;  
-    background-image: url("https://i.postimg.cc/WzbLtrVm/Gemini-Generated-Ima-imresizer.jpg");
+    background: radial-gradient(circle at 50% 30%, #1e1b4b 0%, #0f172a 60%, #030712 100%);
     background-size: cover;
     background-repeat: no-repeat;
-    color: #333;
+    color: #1e293b;
     padding: 20px;
 }
 
 .container {
-    position: relative; /* Needed for absolute positioning of decorative elements */
-    background-color: rgba(255, 255, 255, 0.95); /* Slightly less transparent white for better readability */
-    backdrop-filter: blur(8px); /* Stronger blur effect */
-    -webkit-backdrop-filter: blur(8px); /* Safari support */
-    border: 4px solid rgba(76, 175, 80, 0.7); /* Green border with transparency */
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3), 0 0 0 5px rgba(76, 175, 80, 0.2); /* Deeper shadow and subtle green ring */
-    transition: all 0.4s ease-in-out; /* Smooth transitions for hover effects */
-    transform: translateY(0); /* Initial state for animation/hover */
-    overflow: hidden; /* Ensure decorative elements stay within bounds */
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 3px solid rgba(99, 102, 241, 0.5); /* Indigo-Blue border */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 5px rgba(59, 130, 246, 0.15);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(0);
+    overflow: hidden;
+    border-radius: 1.75rem;
 }
 
 .container:hover {
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), 0 0 0 8px rgba(67, 160, 71, 0.6); /* More pronounced shadow and vibrant ring on hover */
-    transform: translateY(-8px); /* Lift up slightly on hover */
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 0 8px rgba(99, 102, 241, 0.3);
+    transform: translateY(-6px);
 }
 
 @keyframes fadeInScaleUp {
@@ -47,132 +48,38 @@ body {
     0%, 100% {
         transform: translateY(0) rotate(0deg);
     }
-    25% {
-        transform: translateY(-10px) rotate(5deg);
-    }
     50% {
-        transform: translateY(0) rotate(0deg);
-    }
-    75% {
-        transform: translateY(10px) rotate(-5deg);
+        transform: translateY(-12px) rotate(8deg);
     }
 }
 .animate-bounce-slow {
-    animation: bounceSlow 4s ease-in-out infinite; /* Slower and more prominent bounce */
+    animation: bounceSlow 5s ease-in-out infinite;
 }
 
 /* Header Text Enhancements */
-.text-green-800 {
-    text-shadow: 2px 2px 5px rgba(0,0,0,0.3); /* Stronger text shadow for title */
+.text-blue-800 {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: none;
 }
 
-/* Button Enhancements (Applies to all buttons directly in .container or .modal-content-custom) */
 button {
-    font-size: 1.25rem; /* text-xl equivalent, slightly larger */
-    font-weight: 700; /* font-bold equivalent */
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Smoother transition curve */
-    letter-spacing: 0.05em; /* Add slight letter spacing */
+    font-size: 1.15rem;
+    font-weight: 700;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: 0.03em;
 }
 
 button:hover {
-    transform: scale(1.03); /* Slightly more subtle scale on hover */
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25), 0 0 0 5px rgba(74, 222, 128, 0.5); /* Enhanced shadow and ring on hover */
+    transform: scale(1.03);
+    box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3), 0 0 0 4px rgba(147, 197, 253, 0.5);
 }
 
 button:active {
-    transform: scale(0.97); /* Slightly smaller on click */
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15); /* Reduced shadow on active */
+    transform: scale(0.97);
 }
 
-.modal {
-    display: none; /* 🔥 ซ่อน modal ตอนเริ่มต้น */
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.6);
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content-custom {
-    background-color: #fefefe;
-    padding: 40px; /* More padding for a spacious feel */
-    border-radius: 20px; /* More rounded corners */
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4); /* Deeper shadow */
-    width: 95%; /* Adjust width for better mobile responsiveness */
-    max-width: 450px; /* Slightly larger max-width */
-    text-align: center;
-    position: relative;
-    border: 3px solid #34d399; /* Green border for the modal */
-    animation: fadeInScaleUp 0.4s ease-out forwards; /* Animation for modal content itself */
-}
-
-.modal-content-custom h2 {
-    color: #1a4d2e; /* Darker green for modal titles */
-    font-size: 2.25rem; /* Larger modal title */
-    margin-bottom: 1.5rem; /* More space */
-}
-
-.modal-content-custom input[type="email"],
-.modal-content-custom input[type="password"],
-.modal-content-custom input[type="text"] {
-    padding: 0.85rem 1rem; /* Slightly more vertical padding */
-    font-size: 1.05rem; /* Slightly larger text in inputs */
-}
-
-/* Password Toggle Icon */
-.togglePassword {
-    font-size: 1.5rem; /* Larger eye icon */
-    color: #4b5563; /* Darker gray for better contrast */
-    right: 1rem; /* Adjust position */
-}
-
-/* Message Modal Specific Styling */
-#messageModal .modal-content-custom {
-    border: 3px solid #4CAF50; /* Green border for message modal */
-}
-#messageModalTitle {
-    color: #2e7d32; /* Darker green for message modal title */
-}
-#messageModalCloseBtn {
-    background-color: #4CAF50; /* Green button for message modal */
-    font-size: 1.15rem; /* Adjust button text size */
-}
-#messageModalCloseBtn:hover {
-    background-color: #45a049;
-}
-
-
-/* Responsive adjustments */
-@media (max-width: 640px) {
-    .container {
-        padding: 2.5rem; /* Less padding on small screens */
-    }
-    .modal-content-custom {
-        padding: 2.5rem; /* Less padding in modals on small screens */
-    }
-    .modal-content-custom h2 {
-        font-size: 2rem; /* Adjust modal title size on smaller screens */
-    }
-    button {
-        font-size: 1.125rem; /* Smaller button text on small screens */
-        padding-top: 1rem;
-        padding-bottom: 1rem;
-    }
-}
-
-/* ย้าย keyframes เข้ามาด้วย */
-@keyframes gradientMove {
-    0% { background-position: 0% 0%; }
-    50% { background-position: 100% 0%; }
-    100% { background-position: 0% 0%; }
-}
-
-/* Modal override จาก style inline */
 .modal {
     display: none;
     position: fixed;
@@ -182,19 +89,66 @@ button:active {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.6);
+    background-color: rgba(3, 7, 18, 0.75);
+    backdrop-filter: blur(4px);
     justify-content: center;
     align-items: center;
 }
 
 .modal-content-custom {
-    background-color: #fefefe;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    width: 90%;
-    max-width: 400px;
+    background-color: #ffffff;
+    padding: 36px;
+    border-radius: 24px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    width: 95%;
+    max-width: 440px;
     text-align: center;
     position: relative;
+    border: 3px solid #6366f1; /* Indigo border */
+    animation: fadeInScaleUp 0.4s ease-out forwards;
 }
 
+.modal-content-custom h2 {
+    color: #1e3a8a;
+    font-size: 2rem;
+    margin-bottom: 1.25rem;
+    font-weight: 800;
+}
+
+.modal-content-custom input[type="email"],
+.modal-content-custom input[type="password"],
+.modal-content-custom input[type="text"] {
+    padding: 0.85rem 1rem;
+    font-size: 1rem;
+    border-radius: 0.75rem;
+    border: 1px solid #cbd5e1;
+}
+
+.togglePassword {
+    font-size: 1.4rem;
+    color: #64748b;
+    right: 1rem;
+}
+
+#messageModal .modal-content-custom {
+    border: 3px solid #3b82f6;
+}
+#messageModalTitle {
+    color: #1d4ed8;
+}
+#messageModalCloseBtn {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    color: white;
+    border: none;
+    padding: 10px 28px;
+    border-radius: 9999px;
+}
+#messageModalCloseBtn:hover {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+@media (max-width: 640px) {
+    .container { padding: 2rem; }
+    .modal-content-custom { padding: 2rem; }
+    .modal-content-custom h2 { font-size: 1.75rem; }
+}

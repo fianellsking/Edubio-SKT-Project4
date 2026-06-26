@@ -20,9 +20,19 @@ function generateUniqueId() {
   return 'chat-msg-' + Math.random().toString(36).substr(2, 9);
 }
 
+function escapeHtml(unsafe) {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 function formatChatText(text) {
   if (!text) return '';
-  return text
+  const safeText = escapeHtml(text);
+  return safeText
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
     .replace(/^\*\s+(.*)$/gm, '&bull; $1')
     .replace(/^- \s*(.*)$/gm, '&bull; $1')
@@ -126,18 +136,11 @@ async function sendMessageToAI(userMessage, context = {}) {
     setInputEnabled(true);
     const chatInput = document.getElementById('chatInput');
     if (chatInput) chatInput.value = '';
-    appendMessage('ai', 'บันทึก API Key ส่วนตัวของคุณสำเร็จ! ตอนนี้คุณสามารถถามคำถามเกี่ยวกับบทเรียนชีววิทยาได้เลยครับ');
+    appendMessage('ai', 'บันทึก API Key ส่วนตัวของคุณสำเร็จ! ตอนนี้คุณสามารถถามคำถามเกี่ยวกับบทเรียนฟิสิกส์ได้เลยครับ');
     return;
   }
 
-  let apiKey = localStorage.getItem('gemini_api_key') || (typeof GEMINI_API_KEY !== 'undefined' && GEMINI_API_KEY ? GEMINI_API_KEY : "");
-  if (!apiKey) {
-    appendMessage('ai', 'ระบบต้องการ Gemini API Key ฟรี เพื่อเริ่มทำงาน<br>กรุณารับฟรีได้ที่ <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-blue-600 underline font-semibold">Google AI Studio</a><br>และนำ API Key (ที่ขึ้นต้นด้วย AIza) มาคัดลอกวางในช่องแชทนี้ได้เลยครับ<br><span class="text-xs text-gray-500 mt-1 inline-block">(พิมพ์ <strong>/reset</strong> หากต้องการเปลี่ยน Key หรือ <strong>/clear</strong> เพื่อล้างแชท)</span>');
-    setInputEnabled(true);
-    const chatInput = document.getElementById('chatInput');
-    if (chatInput) chatInput.value = '';
-    return;
-  }
+  let customApiKey = localStorage.getItem('gemini_api_key') || "";
 
   appendMessage('ai', '', true); // แสดง typing indicator
 
@@ -167,13 +170,11 @@ ${JSON.stringify(context.lessonsData || chatLessonsData || {})}`;
     }
   };
 
-  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-
   try {
-    const response = await fetch(apiUrl, {
+    const response = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({ payload, customApiKey })
     });
 
     const result = await response.json();
@@ -181,14 +182,16 @@ ${JSON.stringify(context.lessonsData || chatLessonsData || {})}`;
 
     if (result.error) {
       const usingDefaultKey = !localStorage.getItem('gemini_api_key');
+      const getApiKeyInstruction = `🔑 <strong>วิธีใช้ API Key ของคุณเองฟรี:</strong><br><br>หากโควต้ารวมหมด คุณสามารถนำคีย์ส่วนตัวมาใช้ได้ฟรีและปลอดภัย:<br>1. ไปที่ <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-blue-600 underline font-bold">Google AI Studio</a> แล้วกด <strong>Create API key</strong><br>2. คัดลอกคีย์ (รหัสยาวๆ ที่ขึ้นต้นด้วย AIza...)<br>3. นำมาวางลงในช่องพิมพ์แชทด้านล่างแล้วกดส่ง ระบบจะสลับไปใช้คีย์คุณทันทีครับ!<br><br>💡 <span class="text-xs text-gray-600">(พิมพ์ <strong>/reset</strong> เพื่อเปลี่ยนคีย์ หรือ <strong>/clear</strong> เพื่อล้างแชท)</span>`;
+
       if (result.error.code === 429 || (result.error.message && result.error.message.toLowerCase().includes("quota"))) {
         if (usingDefaultKey) {
-          appendMessage('ai', `⚠️ <strong>โควต้า AI ส่วนรวม (Default Key) เต็มชั่วคราวแล้วครับ</strong><br><br>ไม่ต้องกังวล! คุณสามารถใช้คีย์ฟรีของคุณเองเพื่อแชทต่อได้ทันทีโดยไม่สะดุด:<br>1. กดรับคีย์ฟรีที่ <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-blue-600 underline font-bold">Google AI Studio</a><br>2. คัดลอกรหัสคีย์ (ขึ้นต้นด้วย AIza...) มาคัดลอกวางลงในช่องพิมพ์แชทนี้แล้วกดส่งได้ทันที!`);
+          appendMessage('ai', `⚠️ <strong>โควต้า AI ส่วนรวมเต็มชั่วคราวแล้วครับ</strong><br><br>` + getApiKeyInstruction);
         } else {
-          appendMessage('ai', `คุณส่งคำถามเร็วเกินไปหรือโควต้าฟรีชั่วคราวเต็ม (429 Rate Limit)<br>กรุณารอสักครู่ประมาณ 30-60 วินาทีแล้วลองถามใหม่อีกครั้งครับ`);
+          appendMessage('ai', `คุณส่งคำถามเร็วเกินไปหรือโควต้าฟรีชั่วคราวเต็ม (429 Rate Limit)<br><br>` + getApiKeyInstruction);
         }
       } else if (result.error.code === 401 || result.error.code === 403 || (result.error.message && result.error.message.includes("API key"))) {
-        appendMessage('ai', `API Key ไม่ถูกต้องหรือหมดอายุ (${result.error.message})<br>กรุณารับ API Key ใหม่จาก <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-blue-600 underline">Google AI Studio</a> แล้วนำมาวางในช่องแชทครับ`);
+        appendMessage('ai', `API Key ไม่ถูกต้องหรือหมดอายุ (${result.error.message})<br><br>` + getApiKeyInstruction);
         localStorage.removeItem('gemini_api_key');
       } else {
         appendMessage('ai', `เกิดข้อผิดพลาดจากระบบ AI (${result.error.code || 'Error'}): ${result.error.message}`);

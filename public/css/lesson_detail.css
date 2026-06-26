@@ -1,71 +1,64 @@
-/* General body and container styles are mostly handled by Tailwind in HTML */
+/* ✅ Updated lesson_detail.css: Physics Cosmic Blue & Quantum Indigo Theme */
 
 body {
-  font-family: 'Noto Sans Thai', sans-serif;
-  /* Updated background with animated gradient and subtle biological patterns */
-  background: 
-    /* Layer 1: Subtle cellular/molecular pattern (light green dots) */
-    url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2390EE90' fill-opacity='0.5'%3E%3Ccircle cx='20' cy='20' r='8'%3E%3C/circle%3E%3C/g%3E%3C/svg%3E") 0 0,
-    /* Layer 2: Subtle DNA/molecule pattern (faint blue-green lines) */
-    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%234CAF50' fill-opacity='0.08'%3E%3Cpath d='M30 0L0 30L30 60L60 30L30 0Z'/%3E%3C/g%3E%3C/svg%3E") 0 0,
-    /* Layer 3: Main gradient background */
-    linear-gradient(135deg, #96edb7 0%, #c1f4ff 100%); /* Light green to light blue gradient */
-  background-size: 400% 400%; /* Make size larger for smoother animation */
-  animation: gradientShift 20s ease infinite alternate; /* Slower, alternating animation */
+  font-family: 'Noto Sans Thai', 'Inter', sans-serif;
+  background: radial-gradient(circle at 85% 15%, #1e1b4b 0%, #0b0f19 60%, #030712 100%);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* Prevent horizontal scrollbar from animations */
-  position: relative; /* For positioning of decorative elements */
-  min-height: 100vh; /* Ensure it takes full viewport height */
+  overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: 50px; /* Add padding at the bottom for content that might extend */
+  padding-bottom: 60px;
+  color: #1e293b;
 }
 
-/* Keyframes for gradient animation */
 @keyframes gradientShift {
   0% { background-position: 0% 0%; }
   50% { background-position: 100% 100%; }
   100% { background-position: 0% 0%; }
 }
 
-/* Decorative background shapes */
+/* Decorative background shapes (Floating Quantum Particles) */
 .background-shape {
   position: absolute;
-  background-color: rgba(255, 255, 255, 0.1); /* Subtle white overlay */
-  border-radius: 50%; /* Make them circular */
-  filter: blur(15px); /* Soft blur effect */
-  opacity: 0; /* Hidden by default */
-  animation: floatAndFade 20s infinite ease-in-out; /* Slower animation */
-  z-index: 0; /* Ensure they are behind the main content */
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, rgba(59, 130, 246, 0) 70%);
+  border-radius: 50%;
+  filter: blur(16px);
+  opacity: 0;
+  animation: floatAndFade 18s infinite ease-in-out;
+  z-index: 0;
 }
 
-/* Specific positions and sizes for decorative shapes */
-.shape-1 { width: 100px; height: 100px; top: 5%; left: 10%; animation-delay: 0s; }
-.shape-2 { width: 150px; height: 150px; bottom: 10%; right: 15%; animation-delay: 4s; }
-.shape-3 { width: 80px; height: 80px; top: 30%; right: 5%; animation-delay: 8s; }
-.shape-4 { width: 120px; height: 120px; bottom: 25%; left: 5%; animation-delay: 12s; }
-.shape-5 { width: 90px; height: 90px; top: 50%; left: 20%; animation-delay: 16s; }
-.shape-6 { width: 110px; height: 110px; top: 15%; right: 30%; animation-delay: 20s; }
+.shape-1 { width: 140px; height: 140px; top: 5%; left: 10%; animation-delay: 0s; }
+.shape-2 { width: 180px; height: 180px; bottom: 10%; right: 15%; animation-delay: 4s; }
+.shape-3 { width: 100px; height: 100px; top: 30%; right: 5%; animation-delay: 8s; }
+.shape-4 { width: 150px; height: 150px; bottom: 25%; left: 5%; animation-delay: 12s; }
 
-/* Keyframes for floating and fading animation */
 @keyframes floatAndFade {
-  0% { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
-  25% { transform: translateY(-20px) rotate(10deg) scale(1); opacity: 0.15; }
-  50% { transform: translateY(0) rotate(0deg) scale(0.9); opacity: 0.1; }
-  75% { transform: translateY(20px) rotate(-10deg) scale(1.1); opacity: 0.15; }
-  100% { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
+  0% { transform: translateY(0) scale(0.8); opacity: 0; }
+  25% { transform: translateY(-25px) scale(1.1); opacity: 0.35; }
+  50% { transform: translateY(0) scale(0.95); opacity: 0.2; }
+  75% { transform: translateY(25px) scale(1.15); opacity: 0.35; }
+  100% { transform: translateY(0) scale(0.8); opacity: 0; }
 }
 
 .container {
     z-index: 10;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15), 0 0 0 5px rgba(134, 239, 172, 0.5); /* Enhanced shadow and green border */
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(12px);
+    border-radius: 1.75rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 4px rgba(99, 102, 241, 0.2);
+    border: 1px solid rgba(147, 197, 253, 0.4);
 }
 
-/* Styles for lesson sections */
 .lesson-section {
-    opacity: 0; /* Hidden by default for fade-in effect */
+    opacity: 0;
     transform: translateY(20px);
     transition: opacity 0.5s ease-out, transform 0.5s ease-out;
 }
@@ -76,203 +69,149 @@ body {
 }
 
 .question-item {
-    margin-bottom: 1.5rem; /* Equivalent to mb-6 */
-    padding: 1.25rem; /* Equivalent to p-5 */
-    background-color: #f8fafc; /* Tailwind: bg-gray-50 */
-    border-radius: 0.5rem; /* Tailwind: rounded-lg */
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* Tailwind: shadow-md */
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-radius: 1rem;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
 .question-item p {
-    font-size: 1.125rem; /* Tailwind: text-lg */
-    font-weight: 600; /* Tailwind: font-semibold */
-    margin-bottom: 0.75rem; /* Tailwind: mb-3 */
-    color: #374151; /* Tailwind: text-gray-700 */
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #1e293b;
 }
 
 .question-item label {
     display: block;
-    margin-bottom: 0.5rem; /* Tailwind: mb-2 */
+    margin-bottom: 0.6rem;
     cursor: pointer;
-    font-size: 1rem; /* Tailwind: text-base */
-    color: #4b5563; /* Tailwind: text-gray-600 */
-    padding: 0.5rem; /* Tailwind: p-2 */
-    border-radius: 0.375rem; /* Tailwind: rounded-md */
-    transition: background-color 0.2s ease;
+    font-size: 1rem;
+    color: #334155;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    transition: all 0.2s ease;
 }
 
 .question-item label:hover {
-    background-color: #e2e8f0; /* Tailwind: hover:bg-gray-200 */
+    background: #eff6ff;
+    border-color: #93c5fd;
 }
 
 .question-item input[type="radio"] {
-    margin-right: 0.5rem; /* Tailwind: mr-2 */
-    accent-color: #10B981; /* Custom: to style radio button color (Emerald Green) */
+    margin-right: 0.75rem;
+    accent-color: #2563eb;
 }
 
 .question-explanation {
-    margin-top: 1rem; /* Tailwind: mt-4 */
-    padding: 0.75rem; /* Tailwind: p-3 */
-    border-radius: 0.375rem; /* Tailwind: rounded-md */
-    font-size: 0.875rem; /* Tailwind: text-sm */
-    color: #1f2937; /* Tailwind: text-gray-800 */
-    background-color: #dbeafe; /* Tailwind: bg-blue-100 */
-    border: 1px solid #93c5fd; /* Tailwind: border-blue-300 */
-    display: none; /* Hidden by default */
+    margin-top: 1.25rem;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    font-size: 0.95rem;
+    color: #1e293b;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    display: none;
 }
 
-/* Updated colors for correctness in question explanations */
 .question-item.correct .question-explanation {
-    background-color: #d1fae5; /* Tailwind: bg-green-100 */
-    border-color: #6ee7b7; /* Tailwind: border-green-300 */
+    background: #ecfdf5;
+    border-color: #6ee7b7;
 }
 
 .question-item.incorrect .question-explanation {
-    background-color: #fee2e2; /* Tailwind: bg-red-100 */
-    border-color: #fca5a5; /* Tailwind: border-red-300 */
+    background: #fef2f2;
+    border-color: #fca5a5;
 }
 
-/* Added specific styles for selected correct/incorrect labels */
 .question-item label.selected-correct {
-    background-color: #d1fae5; /* Green for selected and correct */
-    border: 1px solid #6ee7b7;
+    background: #ecfdf5;
+    border-color: #34d399;
+    font-weight: bold;
+    color: #065f46;
 }
 
 .question-item label.selected-incorrect {
-    background-color: #fee2e2; /* Red for selected but incorrect */
-    border: 1px solid #fca5a5;
+    background: #fef2f2;
+    border-color: #f87171;
+    color: #991b1b;
 }
 
 .question-item label.correct-answer-highlight {
-    background-color: #a7f3d0; /* Lighter green for the correct answer when an incorrect one was selected */
-    border: 1px solid #34d399;
-    font-weight: bold; /* Make correct answer text bold */
+    background: #d1fae5;
+    border-color: #10b981;
+    font-weight: bold;
+    color: #065f46;
 }
 
-
-/* For video/slides */
 .video-responsive {
     overflow: hidden;
-    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    padding-bottom: 56.25%;
     position: relative;
     height: 0;
     margin-bottom: 1.5rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow to videos */
+    border-radius: 1rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    border: 1px solid #e2e8f0;
 }
 
 .video-responsive iframe {
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    border: none;
-    border-radius: 0.5rem;
+    left: 0; top: 0; height: 100%; width: 100%; position: absolute; border: none; border-radius: 1rem;
 }
 
-/* Kingdom Cards Styling - Adjusted for Forest/Animal Theme */
-.kingdom-card {
-    background-color: #edffeb; /* Lightest orange/yellow (warm earth tone) */
-    border: 1px solid #2fff00; /* Yellow border */
-    border-radius: 10px;
-    padding: 20px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.kingdom-card:hover {
-    transform: translateY(-3px) scale(1.01);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-    background-color: #fef08a; /* Slightly darker yellow on hover */
-}
-
-.kingdom-card-icon {
-    font-size: 3rem; /* Larger emoji */
-    margin-bottom: 15px;
-    line-height: 1; /* Adjust line height for emoji */
-    color: #f59e0b; /* Amber color for icon */
-}
-
-/* Message Box Styling - Enhanced to match login page modal, keeping blue as a neutral alert color */
 .message-box {
-    display: none; /* Hidden by default */
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.6); /* Semi-transparent black background */
-    justify-content: center;
-    align-items: center;
+    display: none; position: fixed; z-index: 1000; inset: 0; overflow: auto;
+    background-color: rgba(3, 7, 18, 0.75); backdrop-filter: blur(4px);
+    align-items: center; justify-content: center;
 }
-.message-box-content {
-    background-color: #fefefe;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    width: 90%;
-    max-width: 400px;
-    text-align: center;
-    position: relative;
-}
-.message-box-content h2 {
-    margin-top: 0;
-    margin-bottom: 20px;
-    color: #333;
-}
-.message-box-content p {
-    margin-bottom: 25px;
-    font-size: 1.1rem;
-    color: #555;
-}
-.message-box-content button {
-    background-color: #3b82f6; /* Blue for consistency with general alerts */
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-}
-.message-box-content button:hover {
-    background-color: #2563eb; /* Darker blue on hover */
-}
+.message-box.active { display: flex; }
 
-#kingdomSelectionSection {
-  position: relative; /* สำคัญมากสำหรับ absolute child */
+.message-box-content {
+    background: #ffffff; padding: 36px; border-radius: 24px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5); width: 90%; max-width: 420px;
+    text-align: center; position: relative; border: 3px solid #6366f1;
 }
 
 .teacher-inside {
   position: absolute;
   bottom: 0px;
   right: -30px;
-  width: 230px;
+  width: 220px;
   height: auto;
   z-index: 10;
-  transform: scaleX(-1); /* 🔄 พลิกแนวนอน */
+  transform: scaleX(-1);
   animation: fadeInUp 0.8s ease-out;
   pointer-events: none;
 }
 
 @media (max-width: 640px) {
-  .teacher-inside {
-    width: 70px;
-    bottom: 10px;
-    right: 10px;
-  }
+  .teacher-inside { width: 80px; bottom: 10px; right: 10px; }
 }
 
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(30px) scaleX(-1); }
   to { opacity: 1; transform: translateY(0) scaleX(-1); }
 }
+
+/* Specific Bulletproof Button Styles for Lesson Detail */
+#backToHomeBtn, #backFromPreTestToHomeBtn, #backToPreTestFromTaxonomyIntroBtn { background: #64748b !important; color: #ffffff !important; }
+#backToHomeBtn:hover, #backFromPreTestToHomeBtn:hover, #backToPreTestFromTaxonomyIntroBtn:hover { background: #475569 !important; }
+
+#submitPreTestBtn { background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%) !important; color: #020617 !important; }
+#submitPreTestBtn:hover { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important; }
+
+#continueToContentBtn, #toggleGeneralSlidesBtn, #returnToHomeFromSummaryBtn, #messageBoxCloseBtn { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; color: #ffffff !important; }
+#continueToContentBtn:hover, #toggleGeneralSlidesBtn:hover, #returnToHomeFromSummaryBtn:hover, #messageBoxCloseBtn:hover { background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%) !important; }
+
+#startTaxonomyLessonBtn { background: linear-gradient(135deg, #3b82f6 0%, #4f46e5 100%) !important; color: #ffffff !important; }
+#startTaxonomyLessonBtn:hover { background: linear-gradient(135deg, #2563eb 0%, #4338ca 100%) !important; }
+
+#submitPostTestBtn { background: linear-gradient(135deg, #6366f1 0%, #2563eb 100%) !important; color: #ffffff !important; }
+#submitPostTestBtn:hover { background: linear-gradient(135deg, #4f46e5 0%, #1d4ed8 100%) !important; }
+
+#viewScoresBtn { background: linear-gradient(135deg, #0891b2 0%, #2563eb 100%) !important; color: #ffffff !important; }
+#viewScoresBtn:hover { background: linear-gradient(135deg, #0e7490 0%, #1d4ed8 100%) !important; }

@@ -21,32 +21,29 @@
         <div class="container bg-white p-10 rounded-2xl shadow-2xl max-w-4xl w-full mx-auto my-8 border border-gray-200">
             <div class="flex justify-between items-center mb-6 border-b pb-4">
                 <h1 id="lessonTitle" class="text-3xl font-extrabold text-blue-700"></h1>
-                <button id="backToHomeBtn" class="bg-gray-400 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
+                <button id="backToHomeBtn" class="bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-5 rounded-full transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
                     กลับหน้าหลัก
                 </button>
             </div>
 
             <!-- Section for Pre-test -->
-            <div id="preTestSection" class="lesson-section mb-8 p-8 bg-lime-50 rounded-xl shadow-lg border border-lime-100">
-                <h2 class="text-2xl font-bold text-lime-800 mb-4">1. แบบทดสอบก่อนเรียน</h2>
+            <div id="preTestSection" class="lesson-section mb-8 p-8 bg-amber-50/70 rounded-2xl shadow-lg border border-amber-200">
+                <h2 class="text-2xl font-bold text-amber-900 mb-4 flex items-center gap-2"><span>📝</span> 1. แบบทดสอบก่อนเรียน</h2>
                 <div id="preTestQuestions" class="mb-4">
                     <!-- Questions will be loaded here by JavaScript -->
                 </div>
-                <button id="submitPreTestBtn" class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+                <button id="submitPreTestBtn" class="bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 font-black py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
                     ส่งคำตอบ
                 </button>
-                <div id="preTestResult" class="mt-4 p-3 bg-lime-100 rounded-md text-lime-900 hidden">
+                <div id="preTestResult" class="mt-4 p-4 bg-amber-100/80 rounded-xl border border-amber-300 text-amber-950 hidden font-semibold">
                     <!-- Pre-test results will be shown here -->
                 </div>
-                <button id="continueToContentBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full transition duration-300 ease-in-out mt-4 hidden">
+                <button id="continueToContentBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-6 rounded-full transition duration-300 ease-in-out mt-4 hidden shadow-md">
                     เข้าสู่เนื้อหาบทเรียน
                 </button>
                 <div class="flex justify-center gap-4 mt-4">
                     <!-- Button to go back to main lessons/home after pre-test -->
-                    <button id="backFromPreTestToHomeBtn" class="bg-gray-400 hover:bg-gray-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105 hidden">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L7.414 11H16a1 1 0 110 2H7.414l2.879 2.879a1 1 0 01-1.414 1.414l-4.5-4.5a1 1 0 010-1.414l4.5-4.5a1 1 0 011.414 1.414L7.414 9H16a1 1 0 110 2H7.414l2.879 2.879a1 1 0 010-1.414z" clip-rule="evenodd" />
-                        </svg>
+                    <button id="backFromPreTestToHomeBtn" class="bg-slate-500 hover:bg-slate-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105 hidden">
                         กลับสู่บทเรียนหลัก
                     </button>
                 </div>
@@ -55,9 +52,9 @@
 
 
             <!-- Section for General Taxonomy Introduction (NEW) -->
-            <div id="taxonomyIntroSection" class="lesson-section mb-8 p-8 bg-purple-50 rounded-xl shadow-lg border border-purple-100 hidden">
-                <h2 id="generalIntroTitle" class="text-2xl font-bold text-purple-800 mb-4">ภาพรวมเนื้อหาเรื่องคลื่นกล</h2>
-                <div id="generalIntroContent" class="prose max-w-none text-gray-700">
+            <div id="taxonomyIntroSection" class="lesson-section mb-8 p-8 bg-blue-50/70 rounded-2xl shadow-lg border border-blue-200 hidden">
+                <h2 id="generalIntroTitle" class="text-2xl font-bold text-blue-900 mb-4 flex items-center gap-2"><span>🌊</span> ภาพรวมเนื้อหาเรื่องคลื่นกล</h2>
+                <div id="generalIntroContent" class="prose max-w-none text-slate-700">
                     <!-- General introduction content from JS -->
                 </div>
                 <!-- General Taxonomy Slides Container (Added) -->
@@ -66,45 +63,59 @@
                 </div>
                 <!-- Controls for General Slides Toggle (Added) -->
                 <div class="flex justify-center items-center mt-6 space-x-4">
-                    <button id="toggleGeneralSlidesBtn" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-full transition duration-300 ease-in-out hidden">
+                    <button id="toggleGeneralSlidesBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-full transition duration-300 ease-in-out hidden">
                         แสดงสไลด์สรุปเนื้อหา
                     </button>
                 </div>
-                <div class="flex justify-between items-center mt-6">
-                    <button id="backToPreTestFromTaxonomyIntroBtn" class="bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-6 rounded-full transition duration-300 ease-in-out">
+                <div class="flex justify-between items-center mt-6 pt-4 border-t border-blue-100">
+                    <button id="backToPreTestFromTaxonomyIntroBtn" class="bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2.5 px-6 rounded-full transition duration-300 ease-in-out">
                         ย้อนกลับแบบทดสอบก่อนเรียน
                     </button>
-                    <button id="startTaxonomyLessonBtn" class="bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
-                        ทำแบบทดสอบหลังเรียน
+                    <button id="startTaxonomyLessonBtn" class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+                        ทำแบบทดสอบหลังเรียน ➡️
                     </button>
                 </div>
             </div>
 
             <!-- Section for Post-test -->
-            <div id="postTestSection" class="lesson-section mb-8 p-8 bg-green-100 rounded-xl shadow-lg border border-green-200 hidden">
-                <h2 class="text-2xl font-bold text-green-800 mb-4">2. แบบทดสอบหลังเรียน</h2>
+            <div id="postTestSection" class="lesson-section mb-8 p-8 bg-indigo-50/70 rounded-2xl shadow-lg border border-indigo-200 hidden">
+                <h2 class="text-2xl font-bold text-indigo-900 mb-4 flex items-center gap-2"><span>🎯</span> 2. แบบทดสอบหลังเรียน</h2>
                 <div id="postTestQuestions" class="mb-4">
                     <!-- Questions will be loaded here by JavaScript -->
                 </div>
-                <button id="submitPostTestBtn" class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+                <button id="submitPostTestBtn" class="bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
                     ส่งคำตอบ
                 </button>
-                <div id="postTestResult" class="mt-4 p-3 bg-green-100 rounded-md text-green-900 hidden">
+                <div id="postTestResult" class="mt-4 p-4 bg-indigo-100/80 rounded-xl border border-indigo-300 text-indigo-950 hidden font-semibold">
                     <!-- Post-test results will be shown here -->
                 </div>
-                <button id="viewScoresBtn" class="bg-gradient-to-r from-yellow-600 to-yellow-700 hover:from-yellow-700 hover:to-yellow-800 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105 mt-4 hidden">
-                    ดูสรุปคะแนน
+                <button id="viewScoresBtn" class="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105 mt-4 hidden">
+                    ดูสรุปคะแนน 🏆
                 </button>
             </div>
 
             <!-- Section for Score Summary -->
-            <div id="scoreSummarySection" class="lesson-section p-8 bg-yellow-50 rounded-xl shadow-lg border border-yellow-100 hidden">
-                <h2 class="text-2xl font-bold text-yellow-800 mb-4">สรุปคะแนน</h2>
-                <p class="text-lg text-gray-700 mb-2">คะแนนก่อนเรียน: <span id="preScoreSummary" class="font-bold"></span></p>
-                <p class="text-lg text-gray-700">คะแนนหลังเรียน: <span id="postScoreSummary" class="font-bold"></span></p>
-                <button id="returnToHomeFromSummaryBtn" class="bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded-full transition duration-300 ease-in-out mt-6">
-                    กลับหน้าหลัก
-                </button>
+            <div id="scoreSummarySection" class="lesson-section p-8 bg-gradient-to-br from-slate-50 to-blue-50 rounded-2xl shadow-xl border border-blue-200 hidden text-center">
+                <h2 class="text-3xl font-extrabold text-blue-900 mb-6 flex justify-center items-center gap-2"><span>🏆</span> สรุปผลคะแนนของคุณ</h2>
+                <div class="flex flex-col sm:flex-row justify-center items-center gap-6 my-6">
+                    <div class="bg-white p-6 rounded-2xl border border-amber-200 shadow-md w-full sm:w-60">
+                        <span class="block text-sm font-semibold text-amber-600 mb-1">ก่อนเรียน</span>
+                        <span id="preScoreSummary" class="text-3xl font-black text-amber-900"></span>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border border-indigo-200 shadow-md w-full sm:w-60">
+                        <span class="block text-sm font-semibold text-indigo-600 mb-1">หลังเรียน (คะแนนสูงสุด)</span>
+                        <span id="postScoreSummary" class="text-3xl font-black text-indigo-900"></span>
+                        <span id="postAttemptsSummary" class="block text-xs font-medium text-slate-500 mt-2"></span>
+                    </div>
+                </div>
+                <div class="flex flex-wrap justify-center gap-4 mt-6">
+                    <button id="retryPostTestBtn" class="bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 hidden">
+                        🔄 ทำข้อสอบหลังเรียนอีกครั้ง (เหลือสิทธิ์อีก 1 ครั้ง)
+                    </button>
+                    <button id="returnToHomeFromSummaryBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition duration-300 ease-in-out shadow-lg">
+                        กลับหน้าหลัก 🏠
+                    </button>
+                </div>
             </div>
 
         </div>
@@ -156,25 +167,6 @@
             // Event listener for the new back button from pre-test to home
             document.getElementById('backFromPreTestToHomeBtn')?.addEventListener('click', () => {
                 window.location.href = '/html/home.html';
-            });
-
-            // Event listener for the new back button from taxonomy intro to pre-test
-            document.getElementById('backToPreTestFromTaxonomyIntroBtn')?.addEventListener('click', () => {
-                document.querySelectorAll('.lesson-section').forEach(section => section.classList.add('hidden'));
-                document.getElementById('preTestSection').classList.remove('hidden');
-                
-                // IMPORTANT: Call the function to reload/render pre-test questions
-                // You need to ensure 'loadPreTestQuestions' is available globally
-                // or imported correctly in lesson_detail.js
-                // If lessonsData is needed, ensure it's accessible.
-                const urlParams = new URLSearchParams(window.location.search);
-                const lessonId = urlParams.get('id'); // Get the lessonId from URL
-                if (typeof loadPreTestQuestions === 'function' && lessonId) {
-                    loadPreTestQuestions(lessonId); // Call the function to load questions
-                } else {
-                    console.error("loadPreTestQuestions function or lessonId not found.");
-                    // Optionally display a message to the user that something went wrong
-                }
             });
 
             // Ensure the backToHomeBtn at the top works as expected

@@ -232,6 +232,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             // Fetch current user profile
             try {
                 const response = await fetch('/api/profile', { headers: { 'Authorization': `Bearer ${token}` } });
+                if (response.status === 401 || response.status === 403) {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    window.location.href = '/html/index.html';
+                    return;
+                }
                 const userData = await response.json();
                 
                 if (Object.keys(userData).length > 0) {
@@ -434,7 +440,7 @@ function showQuestion(index) {
   quizChoices.innerHTML = "";
   q.choices.forEach((choice, i) => {
     const btn = document.createElement("button");
-    btn.className = "w-full bg-gray-100 hover:bg-green-100 px-4 py-2 rounded text-left";
+    btn.className = "w-full bg-slate-50 hover:bg-blue-100 border border-slate-200 px-4 py-3 rounded-xl text-left font-semibold transition";
     btn.textContent = choice;
     btn.onclick = () => {
       if (i === q.answer) score += 2;
@@ -477,7 +483,10 @@ function updateCoinDisplayUI() {
 
   if (currentUser) {
     fetch('/api/profile', { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
+    })
     .then(userData => {
       const dbCoin = userData.coins || 0;
       coinDisplaySpan.textContent = dbCoin;
@@ -600,7 +609,7 @@ function renderQuizPopup(questions, todayKey) {
     <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-xl text-center relative">
       <button id="closeQuizPopupBtn" class="absolute top-2 right-3 text-gray-500 hover:text-red-500 text-2xl font-bold">&times;</button>
       <div id="quizContent" class="text-left text-gray-800 mb-4"></div>
-      <button id="nextQuizBtn" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-6 rounded-full shadow-md transition-transform transform hover:scale-105">ถัดไป</button>
+      <button id="nextQuizBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-8 rounded-full shadow-md transition-transform transform hover:scale-105">ถัดไป ➡️</button>
     </div>
   `;
   document.body.appendChild(modal);
@@ -652,7 +661,7 @@ function updateCoinAndRecordQuiz(dateKey, coinsEarned) {
 resultModal.className = 'fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50';
 resultModal.innerHTML = `
   <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md text-center relative">
-    <h2 class="text-2xl font-bold text-green-600 mb-4">สรุปผล Quiz</h2>
+    <h2 class="text-2xl font-black text-blue-800 mb-4 flex items-center justify-center gap-2"><span>⚡</span> สรุปผล Quiz ฟิสิกส์</h2>
     <p class="text-lg text-gray-700 mb-2">คุณตอบถูก ${coinsEarned / 2} ข้อ</p>
     <p class="text-lg text-yellow-600 mb-4">ได้รับ ${coinsEarned} เหรียญ 🪙</p>
     <button id="closeResultModalBtn" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-full mt-2">ปิด</button>
